@@ -74,6 +74,6 @@
 (setq electric-indent-mode nil)
 
 ;; Line numbers customization
-(set-face-foreground 'linum "#b19cd9")
+(set-face-foreground 'linum "#bdecb6")
 (setq linum-format "%d ")
 
