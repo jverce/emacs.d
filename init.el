@@ -69,6 +69,7 @@
  ;; If there is more than one, they won't work right.
  )
 (defun sesman-linked-sessions (x y))
+(defun sesman-current-sessions (x y))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
