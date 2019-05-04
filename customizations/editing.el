@@ -72,3 +72,8 @@
     (quit nil)))
 
 (setq electric-indent-mode nil)
+
+;; Line numbers customization
+(set-face-foreground 'linum "#b19cd9")
+(setq linum-format "%d ")
+
