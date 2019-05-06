@@ -48,9 +48,16 @@
   (cljr-add-keybindings-with-prefix "C-c C-m")
   (:hook-into clojure-mode))
 
-;; enable paredit in your REPL
-(setup cider-repl-mode
-  (:hook paredit-mode))
+;; Disable welcome message
+(setq cider-repl-display-help-banner nil)
+
+;; Enable paredit in your REPL
+(add-hook 'cider-repl-mode-hook 'paredit-mode)
+
+;; Enable auto-complete
+(add-hook 'cider-repl-mode-hook #'company-mode)
+(add-hook 'cider-mode-hook #'company-mode)
+(global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 
 ;; Use clojure mode for other extensions
 (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
@@ -73,4 +80,13 @@
 (defun cider-user-ns ()
   (interactive)
   (cider-repl-set-ns "user"))
+
+(eval-after-load 'cider
+  '(progn
+     (define-key clojure-mode-map (kbd "C-c C-v") 'cider-start-http-server)
+     (define-key clojure-mode-map (kbd "C-M-r") 'cider-refresh)
+     (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
+     (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)))
+
+;;(add-hook 'cider-repl-mode-hook '(lambda () (setq scroll-conservatively 101)))
 

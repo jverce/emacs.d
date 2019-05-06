@@ -61,7 +61,7 @@
  '(coffee-tab-width 2)
  '(package-selected-packages
    (quote
-    (cider-decompile elein magit tagedit rainbow-delimiters projectile smex ido-completing-read+ cider clojure-mode-extra-font-locking clojure-mode paredit exec-path-from-shell))))
+    (company cider-decompile elein magit tagedit rainbow-delimiters projectile smex ido-completing-read+ cider clojure-mode-extra-font-locking clojure-mode paredit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -69,7 +69,6 @@
  ;; If there is more than one, they won't work right.
  )
 
-(defun sesman-linked-sessions (x y))
 (defun sesman-current-sessions (x y))
 
 (setq custom-file (concat user-emacs-directory "custom.el"))
