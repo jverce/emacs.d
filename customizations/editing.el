@@ -80,3 +80,6 @@
 ;; Line numbers customization
 (set-face-foreground 'linum "#bdecb6")
 (setq linum-format "%d ")
+
+;; Format Rust code after save
+(setq rust-format-on-save t)
