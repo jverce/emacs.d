@@ -57,7 +57,6 @@
 ;; Enable auto-complete
 (add-hook 'cider-repl-mode-hook #'company-mode)
 (add-hook 'cider-mode-hook #'company-mode)
-(global-set-key (kbd "TAB") #'company-indent-or-complete-common)
 
 ;; Use clojure mode for other extensions
 (add-to-list 'auto-mode-alist '("\\.boot$" . clojure-mode))
@@ -88,6 +87,7 @@
      (define-key clojure-mode-map (kbd "C-c u") 'cider-user-ns)
      (define-key cider-mode-map (kbd "C-c u") 'cider-user-ns)
      (define-key cider-repl-mode-map (kbd "<up>") 'cider-repl-previous-input)
-     (define-key cider-repl-mode-map (kbd "<down>") 'cider-repl-next-input)))
+     (define-key cider-repl-mode-map (kbd "<down>") 'cider-repl-next-input)
+     (global-set-key (kbd "TAB") #'company-indent-or-complete-common)))
 
 ;;(add-hook 'cider-repl-mode-hook '(lambda () (setq scroll-conservatively 101)))

@@ -17,3 +17,5 @@ archive-contents
 recentf
 transient
 network-security.data
+.emacs*
+%backup%*

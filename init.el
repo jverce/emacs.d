@@ -7,6 +7,7 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
+<<<<<<< HEAD
 ;; setup.el provides a macro for configuration patterns
 ;; it makes package installation and config nice and tidy!
 ;; https://www.emacswiki.org/emacs/SetupEl
@@ -17,6 +18,27 @@
     (package-refresh-contents))
   (package-install 'setup))
 (require 'setup)
+=======
+;; Save session.
+(require 'desktop)
+(desktop-save-mode 1)
+(setq desktop-auto-save-timeout 4
+      desktop-restore-forces-onscreen nil)
+(add-hook 'desktop-after-read-hook
+ (lambda ()
+   (frameset-restore
+    desktop-saved-frameset
+    :reuse-frames (eq desktop-restore-reuses-frames t)
+    :cleanup-frames (not (eq desktop-restore-reuses-frames 'keep))
+    :force-display desktop-restore-in-current-display
+    :force-onscreen desktop-restore-forces-onscreen)))
+
+;; Download the ELPA archive description if needed.
+;; This informs Emacs about the latest versions of all packages, and
+;; makes them available for download.
+(when (not package-archive-contents)
+  (package-refresh-contents))
+>>>>>>> 4fd7b99 (Rebase)
 
 ;; Define he following variables to remove the compile-log warnings
 ;; when defining ido-ubiquitous
@@ -120,6 +142,13 @@
 (dolist (x addons)
   (load x))
 
+;; Load settings for e-mail.
+(load "mail.el")
+
+;; These customizations make it easier for you to navigate files,
+;; switch buffers, and choose options from the minibuffer.
+(load "navigation.el")
+
 ;; Make gc pauses faster by decreasing the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
 
@@ -135,6 +164,10 @@
 ;; Langauage-specific
 (load "setup-clojure.el")
 (load "setup-js.el")
+
+(add-to-list 'load-path "~/.emacs.d/doxymacs")
+(load "doxymacs.elc")
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -143,7 +176,7 @@
  '(coffee-tab-width 2)
  '(package-selected-packages
    (quote
-    (rust-mode company cider-decompile elein magit tagedit rainbow-delimiters projectile smex ido-completing-read+ cider clojure-mode-extra-font-locking clojure-mode paredit exec-path-from-shell))))
+    (desktop-environment desktop+ use-package markdown-mode+ google-c-style cmake-mode mu4e-conversation mu4e-overview mu4e-alert helm-gtags helm ggtags rust-mode company cider-decompile elein magit tagedit rainbow-delimiters projectile smex ido-completing-read+ cider clojure-mode-extra-font-locking clojure-mode paredit exec-path-from-shell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -153,5 +186,15 @@
 
 (defun sesman-current-sessions (x y))
 
+(load "xclip-1.9.el")
+(xclip-mode 1)
+
+(require 'google-c-style)
+(add-hook 'c-mode-common-hook
+          'google-set-c-style)
+(add-hook 'c-mode-common-hook
+          'google-make-newline-indent)
+
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
+
