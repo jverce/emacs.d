@@ -82,3 +82,12 @@
 (setq linum-format "%d ")
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
+
+;; Format Rust code after save
+(setq rust-format-on-save t)
+
+;;;; Org mode configuration
+;; Enable Org mode
+(require 'org)
+(add-to-list 'auto-mode-alist '("\\.md$" . org-mode))
+(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))

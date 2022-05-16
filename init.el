@@ -166,7 +166,7 @@
 (load "setup-js.el")
 
 (add-to-list 'load-path "~/.emacs.d/doxymacs")
-(load "doxymacs.elc")
+(load "doxymacs.el")
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -175,8 +175,37 @@
  ;; If there is more than one, they won't work right.
  '(coffee-tab-width 2)
  '(package-selected-packages
-   (quote
-    (desktop-environment desktop+ use-package markdown-mode+ google-c-style cmake-mode mu4e-conversation mu4e-overview mu4e-alert helm-gtags helm ggtags rust-mode company cider-decompile elein magit tagedit rainbow-delimiters projectile smex ido-completing-read+ cider clojure-mode-extra-font-locking clojure-mode paredit exec-path-from-shell))))
+   (quote (
+    flycheck
+    solarized-theme
+    desktop-environment
+    desktop+
+    use-package
+    markdown-mode+
+    google-c-style
+    cmake-mode
+    mu4e-conversation
+    mu4e-overview
+    mu4e-alert
+    helm-gtags
+    helm
+    ggtags
+    rust-mode
+    company
+    cider-decompile
+    elein
+    magit
+    tagedit
+    rainbow-delimiters
+    projectile
+    smex
+    ido-completing-read+
+    cider
+    clojure-mode-extra-font-locking
+    clojure-mode
+    paredit
+    exec-path-from-shell
+   ))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
