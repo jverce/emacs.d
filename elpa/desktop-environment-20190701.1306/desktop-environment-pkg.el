@@ -1,2 +1,0 @@
-;;; -*- no-byte-compile: t -*-
-(define-package "desktop-environment" "20190701.1306" "Helps you control your GNU/Linux computer" '((emacs "25.1")) :commit "d2706dd2d83cf9f3672a74b0b3fc490cc84b0f78" :authors '(("Damien Cassou <damien@cassou.me>, Nicolas Petton" . "nicolas@petton.fr")) :maintainer '("Damien Cassou <damien@cassou.me>, Nicolas Petton" . "nicolas@petton.fr") :url "https://gitlab.petton.fr/DamienCassou/desktop-environment")

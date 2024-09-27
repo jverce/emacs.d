@@ -77,12 +77,6 @@
 
 (setq electric-indent-mode nil)
 
-;; Line numbers customization
-(set-face-foreground 'linum "#bdecb6")
-(setq linum-format "%d ")
-
-(add-hook 'before-save-hook 'delete-trailing-whitespace)
-
 ;; Format Rust code after save
 (setq rust-format-on-save t)
 
