@@ -48,7 +48,7 @@
 (setq backup-directory-alist `(("." . ,(concat user-emacs-directory
                                                "backups"))))
 (setq auto-save-default nil)
-(add-hook 'after-save'hook 'delete-trailing-whitespace)
+(add-hook 'after-save-hook 'delete-trailing-whitespace)
 
 ;; comments
 (defun toggle-comment-on-line ()
