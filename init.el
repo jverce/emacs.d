@@ -31,6 +31,7 @@
     "filetree.el"
     "editing.el"
     "elisp-editing.el"
+    "python.el"
     "setup-clojure.el"
     "setup-js.el"
     "shell-integration.el"))
