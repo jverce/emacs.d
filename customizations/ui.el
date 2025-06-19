@@ -5,6 +5,7 @@
 ;; preferences
 
 (tooltip-mode -1)                 ;; disable tooltips
+(menu-bar-mode -1)
 (tool-bar-mode -1)                ;; the toolbar is pretty ugly
 (scroll-bar-mode -1)              ;; disable visible scrollbar
 (blink-cursor-mode 0)             ;; turn off blinking cursor. distracting!
