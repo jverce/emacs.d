@@ -7,6 +7,10 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
+(use-package envrc
+  :config
+  (envrc-global-mode))
+
 ;; setup.el provides a macro for configuration patterns
 ;; it makes package installation and config nice and tidy!
 ;; https://www.emacswiki.org/emacs/SetupEl
@@ -34,7 +38,8 @@
     "python.el"
     "setup-clojure.el"
     "setup-js.el"
-    "shell-integration.el"))
+    "shell-integration.el"
+    "terraform.el"))
 
 (dolist (x addons)
   (load x))
