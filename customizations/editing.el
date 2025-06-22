@@ -4,6 +4,11 @@
 ;; http://www.emacswiki.org/emacs/HippieExpand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+;; Scroll window up and down while keeping the cursor in the same
+;; line
+(keymap-global-set "M-n" 'scroll-up-line)
+(keymap-global-set "M-p" 'scroll-down-line)
+
 ;; Lisp-friendly hippie expand
 (setq hippie-expand-try-functions-list
       '(try-expand-dabbrev
