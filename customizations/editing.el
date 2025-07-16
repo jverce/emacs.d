@@ -78,3 +78,21 @@
     (quit nil)))
 
 (setq electric-indent-mode t)
+
+(add-hook 'after-init-hook 'global-company-mode)
+
+(use-package treesit-auto
+  :ensure t
+
+  :config
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode))
+
+(setq treesit-language-source-alist
+   '((go "https://github.com/tree-sitter/tree-sitter-go")
+     (gomod "https://github.com/camdencheek/tree-sitter-go-mod")))
+
+
+(load "lsp.el")
+(load "go.el")
+(load "terraform.el")

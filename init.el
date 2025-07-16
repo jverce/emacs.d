@@ -38,8 +38,7 @@
     "python.el"
     "setup-clojure.el"
     "setup-js.el"
-    "shell-integration.el"
-    "terraform.el"))
+    "shell-integration.el"))
 
 (dolist (x addons)
   (load x))

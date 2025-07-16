@@ -17,3 +17,6 @@ archive-contents
 recentf
 transient
 network-security.data
+tree-sitter
+tramp
+.lsp-session*

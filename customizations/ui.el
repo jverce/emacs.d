@@ -7,7 +7,7 @@
 (tooltip-mode -1)                 ;; disable tooltips
 (menu-bar-mode -1)
 (tool-bar-mode -1)                ;; the toolbar is pretty ugly
-(scroll-bar-mode -1)              ;; disable visible scrollbar
+;;(scroll-bar-mode -1)              ;; disable visible scrollbar
 (blink-cursor-mode 0)             ;; turn off blinking cursor. distracting!
 (setq create-lockfiles nil)       ;; no need for ~ files when editing
 (fset 'yes-or-no-p 'y-or-n-p)     ;; changes all yes/no questions to y/n type
