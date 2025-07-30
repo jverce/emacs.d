@@ -1,3 +1,7 @@
+(defun efs/lsp-mode-setup ()
+  (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
+  (lsp-headerline-breadcrumb-mode))
+
 (use-package lsp-mode
   :ensure t
   :init
@@ -5,15 +9,22 @@
   (setq lsp-keymap-prefix "C-c l")
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration))
+         (lsp-mode . lsp-enable-which-key-integration)
+         (lsp-mode . esp/lsp-mode-setup)
+         (lsp-mode . company-mode)
+         )
   :commands (lsp lsp-mode lsp-deferred)
   :config
-  (setq lsp-prefer-flymake nil
-        lsp-enable-indentation t
-        lsp-enable-on-type-formatting t)
+  (setq
+   lsp-prefer-flymake nil
+   lsp-enable-indentation t
+   lsp-enable-on-type-formatting t)
   (lsp-modeline-code-actions-mode))
 
 (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
+
+(setq lsp-ui-sideline-enable nil)
+(setq lsp-ui-sideline-show-hover nil)
 
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
