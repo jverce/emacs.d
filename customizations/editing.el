@@ -86,6 +86,7 @@
 
   :config
   (treesit-auto-add-to-auto-mode-alist 'all)
+  (delete 'yaml treesit-auto-langs)
   (global-treesit-auto-mode))
 
 (setq treesit-language-source-alist
