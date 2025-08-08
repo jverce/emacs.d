@@ -1,5 +1,13 @@
 ;; See:  https://clojure-lsp.io/
 ;; also: https://emacs-lsp.github.io/lsp-mode/
+(use-package lsp-mode
+  :ensure t)
+(use-package lsp-ui
+  :ensure t)
+(use-package lsp-ivy
+  :ensure t)
+(use-package lsp-treemacs
+  :ensure t)
 (setup (:package lsp-mode lsp-ui lsp-ivy lsp-treemacs)
   (:hook lsp-enable-which-key-integration)
   (:bind "M-<f7>" lsp-find-references))
@@ -11,6 +19,8 @@
 ;; https://github.com/clojure-emacs/clojure-mode
 ;; subword-mode is useful for working with camel-case tokens,
 ;; like names of Java classes (e.g. JavaClassName)
+(use-package clojure-mode
+  :ensure t)
 (setup (:package clojure-mode)
   (:hook subword-mode
          paredit-mode
@@ -20,6 +30,8 @@
 ;; Clojure. There is a ton of functionality here, so be sure
 ;; to check out the excellent documentation at
 ;; https://docs.cider.mx/cider/index.html
+(use-package cider
+  :ensure t)
 (setup (:package cider)
   (:bind "C-c u" cider-user-ns
          "C-M-r" cider-refresh)
@@ -31,6 +43,8 @@
 
 ;; company provides auto-completion for CIDER
 ;; see https://docs.cider.mx/cider/usage/code_completion.html
+(use-package company
+  :ensure t)
 (setup (:package company)
   (:hook-into cider-mode
 	      cider-repl-mode))
@@ -38,12 +52,16 @@
 ;; hydra provides a nice looking menu for commands
 ;; to see what's available, use M-x and the prefix cider-hydra
 ;; https://github.com/clojure-emacs/cider-hydra
+(use-package cider-hydra
+  :ensure t)
 (setup (:package cider-hydra)
   (:hook-into clojure-mode))
 
 ;; additional refactorings for CIDER
 ;; e.g. add missing libspec, extract function, destructure keys
 ;; https://github.com/clojure-emacs/clj-refactor.el
+(use-package clj-refactor
+  :ensure t)
 (setup (:package clj-refactor)
   (cljr-add-keybindings-with-prefix "C-c C-m")
   (:hook-into clojure-mode))
@@ -73,4 +91,3 @@
 (defun cider-user-ns ()
   (interactive)
   (cider-repl-set-ns "user"))
-

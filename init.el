@@ -8,6 +8,7 @@
 (package-initialize)
 
 (use-package envrc
+  :ensure t
   :config
   (envrc-global-mode))
 

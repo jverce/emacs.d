@@ -1,4 +1,6 @@
 ;; javascript / html
+(use-package tagedit
+  :ensure t)
 (setup (:package tagedit)
   (:hook-into html-mode))
 

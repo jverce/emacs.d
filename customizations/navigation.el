@@ -7,6 +7,8 @@
 ;; are. It's a great way to find out what's in Emacs, and it
 ;; helps transfer commands from your short-term memory to
 ;; your long-term memory and (finally) your muscle memory.
+(use-package which-key
+  :ensure t)
 (setup (:package which-key)
   (which-key-mode)
   (:option which-key-idle-delay 0.3))
@@ -15,6 +17,8 @@
 ;; Installing counsel brings ivy and swiper as dependencies
 ;; swiper is a powerful search-within-a-buffer capability.
 ;; https://github.com/abo-abo/swiper
+(use-package counsel
+  :ensure t)
 (setup (:package counsel)
   (ivy-mode)
   (:option ivy-use-virtual-buffers t
@@ -29,5 +33,7 @@
 ;; ivy-rich-mode adds docstrings and additional metadata
 ;; in the ivy picker minibuffer
 ;; see screenshots: https://github.com/Yevgnen/ivy-rich/blob/master/screenshots.org
+(use-package ivy-rich
+  :ensure t)
 (setup (:package ivy-rich)
   (ivy-rich-mode))

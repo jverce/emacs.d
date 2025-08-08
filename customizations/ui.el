@@ -33,9 +33,13 @@
 ;; can use a-la-carte. doom-modeline is simply a more
 ;; modern and more beautiful modeline.
 ;; doom-modeline uses nice icons from all-the-icons
+(use-package all-the-icons
+  :ensure t)
 (setup (:package all-the-icons))
 
 ;; for some reason, this crashes Emacs on Windows. Argh!
+(use-package doom-modeline
+  :ensure t)
 (setup (when (not (string-equal system-type "windows-nt"))
          (:package doom-modeline)
          (doom-modeline-mode t)))
@@ -46,6 +50,8 @@
 ;; confirmation. You can see what they all
 ;; look like here:
 ;; https://github.com/doomemacs/themes/tree/screenshots
+(use-package doom-themes
+  :ensure t)
 (setup (:package doom-themes)
   (when (not custom-enabled-themes)
     (load-theme 'doom-dracula t)))
@@ -80,4 +86,3 @@
 ;; on your system before you specify it here,
 ;; Some font suggestions:  https://www.creativebloq.com/features/the-best-monospace-fonts-for-coding
 ;; (set-face-attribute 'default nil :font "Fira Code")
-

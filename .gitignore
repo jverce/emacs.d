@@ -15,6 +15,7 @@ custom.el
 archive-contents
 *.elc
 .cache
+eln-cache
 recentf
 transient
 network-security.data

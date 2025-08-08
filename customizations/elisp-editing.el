@@ -1,5 +1,7 @@
 ;; paredit enables structural editing of just about any lisp
 ;; https://www.emacswiki.org/emacs/ParEdit
+(use-package paredit
+  :ensure t)
 (setup (:package paredit)
   (:hook-into emacs-lisp-mode
 	      eval-expression-minibuffer-setup
@@ -18,5 +20,7 @@
 ;; Depending on your theme, the colors might be very subtle,
 ;; and not very rainbow!
 ;; https://github.com/Fanael/rainbow-delimiters
+(use-package rainbow-delimiters
+  :ensure t)
 (setup (:package rainbow-delimiters)
   (:hook-into prog-mode))
