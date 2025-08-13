@@ -81,6 +81,12 @@
 
 (add-hook 'after-init-hook 'global-company-mode)
 
+(use-package envrc
+  :ensure t
+  :hook
+  (after-init . envrc-global-mode))
+(setq envrc-show-summary-in-minibuffer nil)
+
 (use-package treesit-auto
   :ensure t
 
