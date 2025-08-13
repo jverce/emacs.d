@@ -12,6 +12,7 @@
          (lsp-mode . lsp-enable-which-key-integration)
          (lsp-mode . esp/lsp-mode-setup)
          (lsp-mode . company-mode)
+         (python-ts-mode . lsp)
          )
   :commands (lsp lsp-mode lsp-deferred)
   :config

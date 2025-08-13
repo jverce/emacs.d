@@ -103,3 +103,4 @@
 (load "lsp.el")
 (load "go.el")
 (load "terraform.el")
+(load "setup-python.el")
