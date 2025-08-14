@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (use-package go-ts-mode
   :hook
   (go-ts-mode . lsp-deferred)

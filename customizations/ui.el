@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; These customizations change the way emacs looks and disable/enable
 ;; some user interface elements. Some useful customizations are
 ;; commented out, and begin with the line "CUSTOMIZE". These are more
@@ -22,7 +23,7 @@
 (add-to-list 'default-frame-alist '(width . 100))
 
 ;; increase font size for better readability
-(set-face-attribute 'default nil :height 140)
+(set-face-attribute 'default nil :height 110)
 
 ;; on a Mac, don't pop up font menu
 (when (string-equal system-type "darwin") 'ok
@@ -50,31 +51,42 @@
 ;; confirmation. You can see what they all
 ;; look like here:
 ;; https://github.com/doomemacs/themes/tree/screenshots
-(use-package doom-themes
+;; (use-package doom-themes
+;;   :ensure t)
+;; (setup (:package doom-themes)
+;;   (when (not custom-enabled-themes)
+;;     (load-theme 'doom-dracula t)))
+
+(use-package autothemer
   :ensure t)
-(setup (:package doom-themes)
-  (when (not custom-enabled-themes)
-    (load-theme 'doom-dracula t)))
+(add-to-list 'custom-theme-load-path "~/.emacs.d/themes/github/")
+(load-theme 'github-dark-dimmed t)
+
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (select-frame frame)
+                (load-theme 'github-dark-dimmed t))))
 
 ;; These settings relate to how emacs interacts with your operating system
 (setq ;; makes killing/yanking interact with the clipboard
-      x-select-enable-clipboard t
+ x-select-enable-clipboard t
 
-      ;; I'm actually not sure what this does but it's recommended?
-      x-select-enable-primary t
+ ;; I'm actually not sure what this does but it's recommended?
+ x-select-enable-primary t
 
-      ;; Save clipboard strings into kill ring before replacing them.
-      ;; When one selects something in another program to paste it into Emacs,
-      ;; but kills something in Emacs before actually pasting it,
-      ;; this selection is gone unless this variable is non-nil
-      save-interprogram-paste-before-kill t
+ ;; Save clipboard strings into kill ring before replacing them.
+ ;; When one selects something in another program to paste it into Emacs,
+ ;; but kills something in Emacs before actually pasting it,
+ ;; this selection is gone unless this variable is non-nil
+ save-interprogram-paste-before-kill t
 
-      ;; Shows all options when running apropos. For more info,
-      ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html
-      apropos-do-all t
+ ;; Shows all options when running apropos. For more info,
+ ;; https://www.gnu.org/software/emacs/manual/html_node/emacs/Apropos.html
+ apropos-do-all t
 
-      ;; Mouse yank commands yank at point instead of at click.
-      mouse-yank-at-point t)
+ ;; Mouse yank commands yank at point instead of at click.
+ mouse-yank-at-point t)
 
 ;; CUSTOMIZE
 
@@ -85,4 +97,4 @@
 ;; Your choice of font is very personal, and you must have installed it
 ;; on your system before you specify it here,
 ;; Some font suggestions:  https://www.creativebloq.com/features/the-best-monospace-fonts-for-coding
-;; (set-face-attribute 'default nil :font "Fira Code")
+(set-face-attribute 'default nil :font "FiraCode Nerd Font")

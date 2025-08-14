@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; javascript / html
 (use-package tagedit
   :ensure t)

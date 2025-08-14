@@ -1,6 +1,8 @@
-;; -*- lexical-binding: t; -*-
+;;; -*- lexical-binding: t -*-
 ;; Emacs comes with package.el for installing packages.
 ;; Try M-x list-packages to see what's available.
+;;; (setq debug-on-quit t)
+
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")

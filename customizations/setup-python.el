@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; Remap python-mode to python-ts-mode AFTER python is loaded
 (with-eval-after-load 'python
   (when (fboundp 'python-ts-mode)

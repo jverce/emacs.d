@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; Customizations relating to editing a buffer.
 
 ;; Key binding to use "hippie expand" for text autocompletion

@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; paredit enables structural editing of just about any lisp
 ;; https://www.emacswiki.org/emacs/ParEdit
 (use-package paredit

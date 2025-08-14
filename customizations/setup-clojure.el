@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; See:  https://clojure-lsp.io/
 ;; also: https://emacs-lsp.github.io/lsp-mode/
 (use-package lsp-mode
