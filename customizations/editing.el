@@ -97,8 +97,12 @@
   (global-treesit-auto-mode))
 
 (setq treesit-language-source-alist
-   '((go "https://github.com/tree-sitter/tree-sitter-go")
-     (gomod "https://github.com/camdencheek/tree-sitter-go-mod")))
+   '(
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     ))
 
 
 (load "lsp.el")
