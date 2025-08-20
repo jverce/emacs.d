@@ -62,12 +62,6 @@
 (add-to-list 'custom-theme-load-path "~/.emacs.d/themes/github/")
 (load-theme 'github-dark-dimmed t)
 
-(if (daemonp)
-    (add-hook 'after-make-frame-functions
-              (lambda (frame)
-                (select-frame frame)
-                (load-theme 'github-dark-dimmed t))))
-
 ;; These settings relate to how emacs interacts with your operating system
 (setq ;; makes killing/yanking interact with the clipboard
  x-select-enable-clipboard t
