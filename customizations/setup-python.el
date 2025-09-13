@@ -5,13 +5,16 @@
     (add-to-list 'major-mode-remap-alist
                  '(python-mode . python-ts-mode))))
 
-;; Set Python shell interpreter globally (optional)
-(setq python-shell-interpreter "python3")
-
 ;; Install tree-sitter grammar if it's missing
 (when (and (fboundp 'treesit-available-p)
            (treesit-available-p)
            (not (treesit-language-available-p 'python)))
   (treesit-install-language-grammar 'python))
+
+(use-package ruff-format
+  :ensure t)
+
+;; Format with Ruff on save in Python buffers
+(add-hook 'python-ts-mode-hook #'ruff-format-on-save-mode)
 
 (provide 'python)

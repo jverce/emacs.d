@@ -63,10 +63,14 @@
 (load-theme 'github-dark-dimmed t)
 
 ;; These settings relate to how emacs interacts with your operating system
-(setq ;; makes killing/yanking interact with the clipboard
+(setq
+ ;; makes killing/yanking interact with the clipboard
+ select-enable-clipboard t
  x-select-enable-clipboard t
+ x-select-enable-clipboard-manager t
 
  ;; I'm actually not sure what this does but it's recommended?
+ select-enable-primary t
  x-select-enable-primary t
 
  ;; Save clipboard strings into kill ring before replacing them.
