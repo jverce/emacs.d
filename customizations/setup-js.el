@@ -21,3 +21,14 @@
 
 (custom-set-variables
  '(coffee-tab-width 2))
+
+(use-package js-ts-mode
+  :hook
+  (js-ts-mode . lsp-deferred)
+
+  :init
+  (add-to-list
+   'auto-mode-alist
+   '("\\.js\\'" . js-ts-mode)
+   '("\\.mjs\\'" . js-ts-mode))
+  )

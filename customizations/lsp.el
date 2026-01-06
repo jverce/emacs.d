@@ -20,7 +20,8 @@
   (setq
    lsp-prefer-flymake nil
    lsp-enable-indentation t
-   lsp-enable-on-type-formatting t)
+   lsp-enable-on-type-formatting t
+   lsp-format-buffer-on-save t)
   (lsp-modeline-code-actions-mode))
 
 (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
