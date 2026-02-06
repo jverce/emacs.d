@@ -24,13 +24,13 @@ will see some warnings pop up, but they are only style suggestions for
 the packages being loaded.
 
 ## Prerequisites
-Since you're working in Clojure, we assume you have it and its prerequisites 
-installed (see [this guide](https://clojure.org/guides/install_clojure) for 
-those instructions). Additionally, you're likely to want to have 
-[Leiningen](https://leiningen.org/) installed, since many many projects use 
+Since you're working in Clojure, we assume you have it and its prerequisites
+installed (see [this guide](https://clojure.org/guides/install_clojure) for
+those instructions). Additionally, you're likely to want to have
+[Leiningen](https://leiningen.org/) installed, since many many projects use
 it for running builds, tests, and tasks.
 
-To support specific features of this emacs configuration, there are three more 
+To support specific features of this emacs configuration, there are three more
 prerequisites:
 
 1. [git](https://git-scm.com/) is the dominant system for source code
@@ -39,16 +39,16 @@ prerequisites:
 2. [clojure-lsp](https://clojure-lsp.io/installation/) enables Find References,
    live linting, and many more features.
 3. To get nice icons in your modeline, you need the fonts installed. After
-   startup the first time, run `M-x all-the-icons-install-fonts`. You will only 
+   startup the first time, run `M-x all-the-icons-install-fonts`. You will only
    need to do this once.
 
 ### A Word About Project-Wide Search
-One of the capabilities that comes in very handy is searching for some text 
+One of the capabilities that comes in very handy is searching for some text
 across all the files within your project. You can use git for that with the following
-command: `M-x counsel-git-grep`. This works just fine, with the caveat that it 
+command: `M-x counsel-git-grep`. This works just fine, with the caveat that it
 _must_ be in a directory version-controlled with git. There are quite a few
-alternative search utilities, but you'll have to install them separately. In 
-practice, you'll probably settle on one you like and use it exclusively. Here 
+alternative search utilities, but you'll have to install them separately. In
+practice, you'll probably settle on one you like and use it exclusively. Here
 are the links, along with the emacs command to invoke each:
 
 * [ack](https://beyondgrep.com/) `M-x counsel-ack`
@@ -62,8 +62,8 @@ are the links, along with the emacs command to invoke each:
 ## Features
 This will allow you to edit Clojure files with syntax-aware
 highlighting and [structural
-editing](https://clojure.org/guides/structural_editing) 
-via paredit, which means it will keep all your delimiters for nested forms 
+editing](https://clojure.org/guides/structural_editing)
+via paredit, which means it will keep all your delimiters for nested forms
 balanced (think parens, square brackets, and curly braces). Check out [this animated
 guide](http://danmidwood.com/content/2014/11/21/animated-paredit.html)
 to paredit. It's one of those things that seems strange at first, but
@@ -95,6 +95,52 @@ the package list when it's finished.
 
 If you ever get curious to look, you can find all the installed packages in `~/.emacs.d/elpa`.
 
+## Running as a Daemon (macOS)
+
+To run Emacs as a background daemon that starts on login, create a
+launchd plist at `~/Library/LaunchAgents/org.gnu.emacs.daemon.plist`:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>org.gnu.emacs.daemon</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/opt/homebrew/bin/emacs</string>
+        <string>--fg-daemon</string>
+    </array>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>
+```
+
+Use `--fg-daemon` instead of `--daemon`. The `--daemon` flag forks a
+child process, which causes launchd to lose track of the real
+PID. This breaks `KeepAlive` restarts and `launchctl kickstart -k`,
+and can result in stale duplicate daemons. `--fg-daemon` keeps Emacs
+in the foreground so launchd can manage it correctly.
+
+Load the service with:
+
+```bash
+launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/org.gnu.emacs.daemon.plist
+```
+
+Then connect with `emacsclient -c` to open a new frame, or
+`emacsclient -t` for a terminal frame.
+
+To restart the daemon:
+
+```bash
+launchctl kickstart -k gui/$(id -u)/org.gnu.emacs.daemon
+```
+
 ## Organization
 
 I've tried to separate everything logically and document the purpose
@@ -106,9 +152,9 @@ what's going on.
 ## Supporting CSS, HTML, JS, etc.
 
 Emacs has decent support for CSS, HTML, JS, and many other file types
-out of the box, but if you want better support, then have a look at 
+out of the box, but if you want better support, then have a look at
 [my personal emacs config's
-init.el](https://github.com/flyingmachine/emacs.d/blob/master/init.el). 
+init.el](https://github.com/flyingmachine/emacs.d/blob/master/init.el).
 It's meant to read as a table of contents. The emacs.d as a whole adds the following:
 
 * [Customizes js-mode and html editing](https://github.com/flyingmachine/emacs.d/blob/master/customizations/setup-js.el)
@@ -117,7 +163,7 @@ It's meant to read as a table of contents. The emacs.d as a whole adds the follo
     * Uses `tagedit` to give you paredit-like functionality when editing html
     * adds support for coffee mode
 * [Uses enh-ruby-mode for ruby
-editing](https://github.com/flyingmachine/emacs.d/blob/master/customizations/setup-ruby.el). 
+editing](https://github.com/flyingmachine/emacs.d/blob/master/customizations/setup-ruby.el).
 enh-ruby-mode is a little nicer than the built-in ruby-mode, in my opinion.
     * Associates many filenames and extensions with enh-ruby-mode (.rb, .rake, Rakefile, etc)
     * Adds keybindings for running specs
