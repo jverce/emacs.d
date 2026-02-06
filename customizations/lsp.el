@@ -26,7 +26,8 @@ this hook on `lsp-after-open-hook' provides a reliable fallback."
   (setq
    lsp-prefer-flymake nil
    lsp-enable-indentation t
-   lsp-enable-on-type-formatting t)
+   lsp-enable-on-type-formatting t
+   lsp-rubocop-use-bundler t)
   (lsp-modeline-code-actions-mode)
   (add-hook 'lsp-after-open-hook #'my/lsp-ensure-features))
 
