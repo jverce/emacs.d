@@ -11,7 +11,7 @@
   :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
          ;; if you want which-key integration
          (lsp-mode . lsp-enable-which-key-integration)
-         (lsp-mode . esp/lsp-mode-setup)
+         (lsp-mode . efs/lsp-mode-setup)
          (lsp-mode . company-mode)
          (python-ts-mode . lsp)
          )
@@ -24,15 +24,11 @@
    lsp-format-buffer-on-save t)
   (lsp-modeline-code-actions-mode))
 
-(add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
-
 (setq lsp-ui-sideline-enable nil)
 (setq lsp-ui-sideline-show-hover nil)
 
 ;; optionally
 (use-package lsp-ui :commands lsp-ui-mode)
-;; if you are helm user
-(use-package helm-lsp :commands helm-lsp-workspace-symbol)
 ;; if you are ivy user
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 (use-package lsp-treemacs :commands lsp-treemacs-errors-list)
@@ -42,10 +38,7 @@
   :ensure t)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-;; optional if you want which-key integration
-(use-package which-key
-  :config
-  (which-key-mode))
+(define-key lsp-mode-map (kbd "M-<f7>") #'lsp-find-references)
 
 (setq major-mode-remap-alist
       '((go-mod . go-ts-mode)))

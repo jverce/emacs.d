@@ -16,5 +16,3 @@
 
 ;; Format with Ruff on save in Python buffers
 (add-hook 'python-ts-mode-hook #'ruff-format-on-save-mode)
-
-(provide 'python)

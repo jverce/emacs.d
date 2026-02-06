@@ -82,12 +82,6 @@
 
 (add-hook 'after-init-hook 'global-company-mode)
 
-(use-package envrc
-  :ensure t
-  :hook
-  (after-init . envrc-global-mode))
-(setq envrc-show-summary-in-minibuffer nil)
-
 (use-package treesit-auto
   :ensure t
 
@@ -103,9 +97,3 @@
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
      ))
-
-
-(load "lsp.el")
-(load "go.el")
-(load "terraform.el")
-(load "setup-python.el")

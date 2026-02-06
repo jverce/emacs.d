@@ -1,17 +1,4 @@
 ;;; -*- lexical-binding: t -*-
-;; See:  https://clojure-lsp.io/
-;; also: https://emacs-lsp.github.io/lsp-mode/
-(use-package lsp-mode
-  :ensure t)
-(use-package lsp-ui
-  :ensure t)
-(use-package lsp-ivy
-  :ensure t)
-(use-package lsp-treemacs
-  :ensure t)
-(setup (:package lsp-mode lsp-ui lsp-ivy lsp-treemacs)
-  (:hook lsp-enable-which-key-integration)
-  (:bind "M-<f7>" lsp-find-references))
 
 ;; clojure-mode is (naturally) the major mode for editing
 ;; Clojure and ClojureScript. subword-mode allows words

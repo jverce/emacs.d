@@ -8,7 +8,6 @@
 (tooltip-mode -1)                 ;; disable tooltips
 (menu-bar-mode -1)
 (tool-bar-mode -1)                ;; the toolbar is pretty ugly
-;;(scroll-bar-mode -1)              ;; disable visible scrollbar
 (blink-cursor-mode 0)             ;; turn off blinking cursor. distracting!
 (setq create-lockfiles nil)       ;; no need for ~ files when editing
 (fset 'yes-or-no-p 'y-or-n-p)     ;; changes all yes/no questions to y/n type
@@ -26,7 +25,7 @@
 (set-face-attribute 'default nil :height 110)
 
 ;; on a Mac, don't pop up font menu
-(when (string-equal system-type "darwin") 'ok
+(when (string-equal system-type "darwin")
   (global-set-key (kbd "s-t") '(lambda () (interactive))))
 
 ;; doom is a whole Emacs distribution unto itself,
@@ -36,7 +35,6 @@
 ;; doom-modeline uses nice icons from all-the-icons
 (use-package all-the-icons
   :ensure t)
-(setup (:package all-the-icons))
 
 ;; for some reason, this crashes Emacs on Windows. Argh!
 (use-package doom-modeline
@@ -44,18 +42,6 @@
 (setup (when (not (string-equal system-type "windows-nt"))
          (:package doom-modeline)
          (doom-modeline-mode t)))
-
-;; Lots of great themes, both light ones
-;; and dark ones. Use M-x load-theme to select one.
-;; The first time you load one, it asks for
-;; confirmation. You can see what they all
-;; look like here:
-;; https://github.com/doomemacs/themes/tree/screenshots
-;; (use-package doom-themes
-;;   :ensure t)
-;; (setup (:package doom-themes)
-;;   (when (not custom-enabled-themes)
-;;     (load-theme 'doom-dracula t)))
 
 (use-package autothemer
   :ensure t)
@@ -85,12 +71,6 @@
 
  ;; Mouse yank commands yank at point instead of at click.
  mouse-yank-at-point t)
-
-;; CUSTOMIZE
-
-;; You can uncomment this to remove the graphical toolbar at the top. After
-;; awhile, you won't need the toolbar.
-;; (tool-bar-mode -1)
 
 ;; Your choice of font is very personal, and you must have installed it
 ;; on your system before you specify it here,

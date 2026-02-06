@@ -13,5 +13,3 @@
    'auto-mode-alist
    '("\\.yml\\'" . yaml-mode))
   )
-
-(provide 'yaml)

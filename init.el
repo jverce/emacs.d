@@ -1,8 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 ;; Emacs comes with package.el for installing packages.
 ;; Try M-x list-packages to see what's available.
-;;; (setq debug-on-quit t)
-
 (require 'package)
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
@@ -12,7 +10,8 @@
 (use-package envrc
   :ensure t
   :config
-  (envrc-global-mode))
+  (envrc-global-mode)
+  (setq envrc-show-summary-in-minibuffer nil))
 
 ;; setup.el provides a macro for configuration patterns
 ;; it makes package installation and config nice and tidy!
@@ -37,8 +36,12 @@
     "git.el"
     "filetree.el"
     "editing.el"
+    "lsp.el"
+    "go.el"
+    "terraform.el"
+    "setup-python.el"
+    "yaml.el"
     "elisp-editing.el"
-    "python.el"
     "setup-clojure.el"
     "setup-js.el"
     "shell-integration.el"))

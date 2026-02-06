@@ -19,8 +19,7 @@
 	   (define-key coffee-mode-map "\C-j" 'coffee-newline-and-indent)
 	   (setq coffee-cleanup-whitespace nil))))
 
-(custom-set-variables
- '(coffee-tab-width 2))
+(setq coffee-tab-width 2)
 
 (use-package js-ts-mode
   :hook
