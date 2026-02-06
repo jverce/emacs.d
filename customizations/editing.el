@@ -92,7 +92,7 @@
 
 (setq treesit-language-source-alist
    '(
-     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (go "https://github.com/tree-sitter/tree-sitter-go" "v0.20.0")
      (gomod "https://github.com/camdencheek/tree-sitter-go-mod")
      (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
      (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")

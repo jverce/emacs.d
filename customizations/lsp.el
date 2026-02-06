@@ -1,28 +1,34 @@
 ;;; -*- lexical-binding: t -*-
+(use-package flycheck
+  :ensure t)
+
 (defun efs/lsp-mode-setup ()
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
 
+(defun my/lsp-ensure-features ()
+  "Enable flycheck, diagnostics, and format-on-save after LSP connects.
+`lsp-managed-mode' should handle this but sometimes fails to activate;
+this hook on `lsp-after-open-hook' provides a reliable fallback."
+  (flycheck-mode 1)
+  (lsp-diagnostics-mode 1)
+  (add-hook 'before-save-hook #'lsp-format-buffer nil t))
+
 (use-package lsp-mode
   :ensure t
   :init
-  ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
   (setq lsp-keymap-prefix "C-c l")
-  :hook (;; replace XXX-mode with concrete major-mode(e. g. python-mode)
-         ;; if you want which-key integration
-         (lsp-mode . lsp-enable-which-key-integration)
+  :hook ((lsp-mode . lsp-enable-which-key-integration)
          (lsp-mode . efs/lsp-mode-setup)
-         (lsp-mode . company-mode)
-         (python-ts-mode . lsp)
-         )
+         (lsp-mode . company-mode))
   :commands (lsp lsp-mode lsp-deferred)
   :config
   (setq
    lsp-prefer-flymake nil
    lsp-enable-indentation t
-   lsp-enable-on-type-formatting t
-   lsp-format-buffer-on-save t)
-  (lsp-modeline-code-actions-mode))
+   lsp-enable-on-type-formatting t)
+  (lsp-modeline-code-actions-mode)
+  (add-hook 'lsp-after-open-hook #'my/lsp-ensure-features))
 
 (setq lsp-ui-sideline-enable nil)
 (setq lsp-ui-sideline-show-hover nil)

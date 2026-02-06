@@ -7,6 +7,15 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
+;; Copy PATH from login shell — exec-path-from-shell doesn't work
+;; reliably under launchd, so we do it directly.  asdf shims live
+;; in .zshrc (interactive-only), so we prepend them explicitly.
+(let* ((shell-path (string-trim-right
+                    (shell-command-to-string "/bin/zsh -l -c 'printf %s \"$PATH\"'")))
+       (path (concat (getenv "HOME") "/.asdf/shims:" shell-path)))
+  (setenv "PATH" path)
+  (setq exec-path (parse-colon-path path)))
+
 (use-package envrc
   :ensure t
   :config
@@ -41,7 +50,7 @@
     "go.el"
     "terraform.el"
     "setup-python.el"
-    "yaml.el"
+    "setup-yaml.el"
     "elisp-editing.el"
     "setup-clojure.el"
     "setup-js.el"
