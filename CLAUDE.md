@@ -38,6 +38,7 @@ The `addons` list in `init.el` loads these files in order:
 | `filetree.el` | Treemacs + treemacs-projectile + treemacs-magit, ace-window |
 | `editing.el` | General editor behavior (hippie-expand, line numbers, paren matching, backups, company-mode, treesit-auto, evil-nerd-commenter) |
 | `lsp.el` | LSP-mode config, keybindings (prefix `C-c l`), lsp-ui, lsp-ivy, lsp-treemacs, dap-mode, format-on-save |
+| `languages.el` | Universal LSP hooks for tree-sitter modes (Rust, C/C++, Java, Ruby, Kotlin, TypeScript, TSX, HTML, CSS, JSON, Bash, Dockerfile, C#, Lua, XML, CMake) + extra auto-mode-alist entries |
 | `go.el` | go-ts-mode with LSP, format + organize imports on save |
 | `terraform.el` | terraform-mode with outline-minor-mode, format-on-save |
 | `setup-python.el` | python-ts-mode remap, tree-sitter grammar auto-install, ruff format-on-save |

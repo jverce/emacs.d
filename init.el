@@ -37,6 +37,7 @@
     "filetree.el"
     "editing.el"
     "lsp.el"
+    "languages.el"
     "go.el"
     "terraform.el"
     "setup-python.el"
