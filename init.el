@@ -7,11 +7,17 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
-;; Copy PATH from login shell — exec-path-from-shell doesn't work
-;; reliably under launchd, so we do it directly.  asdf shims live
-;; in .zshrc (interactive-only), so we prepend them explicitly.
-(let* ((shell-path (string-trim-right
-                    (shell-command-to-string "/bin/zsh -l -c 'printf %s \"$PATH\"'")))
+;; Copy PATH from a deterministic login shell.
+;; launchctl can set SHELL to /bin/sh for daemon sessions, so we map by OS.
+(let* ((preferred-shell (cond
+                         ((eq system-type 'darwin) "/bin/zsh")
+                         ((eq system-type 'gnu/linux) "/bin/bash")
+                         (t "/bin/sh")))
+       (login-shell (if (file-exists-p preferred-shell)
+                        preferred-shell
+                      "/bin/sh"))
+       (shell-path-cmd (format "%s -l -c 'printf %%s \"$PATH\"'" (shell-quote-argument login-shell)))
+       (shell-path (string-trim-right (shell-command-to-string shell-path-cmd)))
        (path (concat (getenv "HOME") "/.asdf/shims:" shell-path)))
   (setenv "PATH" path)
   (setq exec-path (parse-colon-path path)))
