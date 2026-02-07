@@ -30,8 +30,8 @@
   (when-let ((venv-bin (my/python-project-venv-bin)))
     (setq-local exec-path (cons venv-bin (delete venv-bin exec-path)))
     (setq-local process-environment (copy-sequence process-environment))
-    ;; Restrict Python LSP client selection to our expected uv-managed tools.
-    (setq-local lsp-enabled-clients '(pylsp ruff))
+    ;; Use pylsp as the Python LSP backend.
+    (setq-local lsp-enabled-clients '(pylsp))
     (setenv
      "PATH"
      (mapconcat
@@ -42,23 +42,48 @@
 
 ;; Load Python LSP clients so lsp-deferred can match immediately.
 (with-eval-after-load 'lsp-mode
-  (require 'lsp-ruff nil t)
   (require 'lsp-pylsp nil t))
+
+(defun my/python-lsp-server-available-p ()
+  (executable-find "pylsp"))
+
+(defun my/python-start-lsp-if-available ()
+  (when (and (fboundp 'lsp-deferred)
+             (my/python-lsp-server-available-p)
+             (not (bound-and-true-p lsp-mode)))
+    (lsp-deferred)))
 
 (defun my/python-after-envrc-apply (&rest _)
   "Re-apply Python venv PATH after envrc, then start LSP if needed."
   (when (derived-mode-p 'python-base-mode)
     (my/python-use-project-venv)
-    (when (and (fboundp 'lsp-deferred)
-               (not (bound-and-true-p lsp-mode)))
-      (lsp-deferred))))
+    (my/python-start-lsp-if-available)))
 
 (with-eval-after-load 'envrc
   (unless (advice-member-p #'my/python-after-envrc-apply 'envrc--apply)
     (advice-add 'envrc--apply :after #'my/python-after-envrc-apply)))
 
+(defun my/python-lsp-process-p (proc)
+  (let* ((name (process-name proc))
+         (cmd (ignore-errors (process-command proc)))
+         (cmdline (if (listp cmd) (mapconcat #'identity cmd " ") "")))
+    (or (string-match-p "pylsp" name)
+        (string-match-p "pylsp" cmdline))))
+
+(defun my/python-stop-pylsp-processes-on-exit ()
+  "Terminate pylsp-related subprocesses before daemon shutdown."
+  (dolist (proc (process-list))
+    (when (my/python-lsp-process-p proc)
+      (set-process-query-on-exit-flag proc nil)
+      (ignore-errors (delete-process proc))))
+  ;; Give process teardown a short moment to complete before exiting.
+  (accept-process-output nil 0.05))
+
+;; Run early in kill-emacs-hook to avoid pylsp-related stop hangs.
+(add-hook 'kill-emacs-hook #'my/python-stop-pylsp-processes-on-exit)
+
 ;; IDE defaults for Python buffers, with a fallback to python-mode when needed.
 (dolist (hook '(python-ts-mode-hook python-mode-hook))
   (add-hook hook #'my/python-use-project-venv)
   (add-hook hook #'ruff-format-on-save-mode)
-  (add-hook hook #'lsp-deferred))
+  (add-hook hook #'my/python-start-lsp-if-available))

@@ -1,9 +1,14 @@
 ;;; languages.el --- Universal language support via tree-sitter + LSP -*- lexical-binding: t -*-
 
-;; Start LSP for any programming mode.  lsp-deferred is a no-op when
-;; no server is registered, so this is safe for modes like emacs-lisp.
+;; Start LSP for programming modes, but let Python manage startup after
+;; virtualenv/envrc setup in setup-python.el.
 (setq lsp-warn-no-matched-clients t)
-(add-hook 'prog-mode-hook #'lsp-deferred)
+
+(defun my/lsp-deferred-except-python ()
+  (unless (derived-mode-p 'python-base-mode)
+    (lsp-deferred)))
+
+(add-hook 'prog-mode-hook #'my/lsp-deferred-except-python)
 
 ;; Extra auto-mode-alist entries for extensions not covered by treesit-auto.
 (add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
