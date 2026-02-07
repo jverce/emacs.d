@@ -29,7 +29,9 @@
    lsp-prefer-flymake nil
    lsp-enable-indentation t
    lsp-enable-on-type-formatting t
-   lsp-rubocop-use-bundler t)
+   lsp-rubocop-use-bundler t
+   lsp-headerline-breadcrumb-icons-enable nil)
+  (setq lsp-headerline-arrow nil)
   (lsp-modeline-code-actions-mode))
 
 (setq lsp-ui-sideline-enable nil)
