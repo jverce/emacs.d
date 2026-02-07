@@ -7,6 +7,43 @@
                          ("elpa" . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
+;; Retry package installs to handle transient network/archive failures.
+(defvar my/package-bootstrap-max-retries 3)
+(defvar my/package-bootstrap-retry-delay 2)
+
+(defun my/ensure-package-with-retries (pkg &optional retries delay)
+  (let* ((max-attempts (or retries my/package-bootstrap-max-retries))
+         (retry-delay (or delay my/package-bootstrap-retry-delay))
+         (attempt 1)
+         (installed (package-installed-p pkg))
+         last-error)
+    (while (and (not installed) (<= attempt max-attempts))
+      (condition-case err
+          (progn
+            (package-refresh-contents)
+            (package-install pkg)
+            (setq installed (package-installed-p pkg)))
+        (error
+         (setq last-error err)
+         (when (< attempt max-attempts)
+           (sleep-for retry-delay))))
+      (setq attempt (1+ attempt)))
+    (unless installed
+      (error
+       "Failed to install `%s` after %d attempt(s): %s"
+       pkg
+       max-attempts
+       (if last-error
+           (error-message-string last-error)
+         "unknown error")))
+    installed))
+
+(defun my/ensure-required-packages ()
+  (dolist (pkg '(setup flycheck lsp-mode ruff-format))
+    (my/ensure-package-with-retries pkg)))
+
+(my/ensure-required-packages)
+
 ;; Copy PATH from a deterministic login shell.
 ;; launchctl can set SHELL to /bin/sh for daemon sessions, so we map by OS.
 (let* ((preferred-shell (cond
@@ -31,12 +68,6 @@
 ;; setup.el provides a macro for configuration patterns
 ;; it makes package installation and config nice and tidy!
 ;; https://www.emacswiki.org/emacs/SetupEl
-(if (package-installed-p 'setup)
-    nil
-  (if (memq 'setup package-archive-contents)
-      nil
-    (package-refresh-contents))
-  (package-install 'setup))
 (require 'setup)
 
 ;; All other features are loaded one by one from

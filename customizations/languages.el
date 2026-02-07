@@ -2,7 +2,7 @@
 
 ;; Start LSP for any programming mode.  lsp-deferred is a no-op when
 ;; no server is registered, so this is safe for modes like emacs-lisp.
-(setq lsp-warn-no-matched-clients nil)
+(setq lsp-warn-no-matched-clients t)
 (add-hook 'prog-mode-hook #'lsp-deferred)
 
 ;; Extra auto-mode-alist entries for extensions not covered by treesit-auto.
