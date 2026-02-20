@@ -13,6 +13,8 @@
 (fset 'yes-or-no-p 'y-or-n-p)     ;; changes all yes/no questions to y/n type
 (setq inhibit-startup-message t)  ;; go straight to scratch buffer on startup
 (setq ring-bell-function 'ignore) ;; turn off audible bell
+(add-to-list
+ 'completion-styles 'flex t)      ;; enable fuzzy search/matching
 
 ;; show full path in title bar
 (setq-default frame-title-format "%b (%f)")
