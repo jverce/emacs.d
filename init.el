@@ -88,6 +88,7 @@
     "terraform.el"
     "setup-python.el"
     "setup-yaml.el"
+    "markdown.el"
     "elisp-editing.el"
     "setup-clojure.el"
     "setup-js.el"

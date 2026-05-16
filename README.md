@@ -30,7 +30,7 @@ those instructions). Additionally, you're likely to want to have
 [Leiningen](https://leiningen.org/) installed, since many many projects use
 it for running builds, tests, and tasks.
 
-To support specific features of this emacs configuration, there are three more
+To support specific features of this emacs configuration, there are four more
 prerequisites:
 
 1. [git](https://git-scm.com/) is the dominant system for source code
@@ -41,6 +41,9 @@ prerequisites:
 3. To get nice icons in your modeline, you need the fonts installed. After
    startup the first time, run `M-x all-the-icons-install-fonts`. You will only
    need to do this once.
+4. [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) enables
+   Markdown linting and format-on-save. On Arch Linux, install it with
+   `sudo pacman -S markdownlint-cli2`.
 
 ### A Word About Project-Wide Search
 One of the capabilities that comes in very handy is searching for some text
