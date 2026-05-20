@@ -48,20 +48,6 @@
   :ensure t)
 ;; (use-package dap-LANGUAGE) to load the dap adapter for your language
 
-(defun my/lsp-eslint-working-directory (orig-fn workspace current-file)
-  "Use the nearest node_modules directory as ESLint's working directory.
-Prevents ESLint from walking up to a parent .eslintrc whose plugins
-aren't installed at that level."
-  (let ((project-dir (locate-dominating-file current-file "node_modules")))
-    (if project-dir
-        (list :directory (directory-file-name (expand-file-name project-dir))
-              :!cwd :json-false)
-      (funcall orig-fn workspace current-file))))
-
-(with-eval-after-load 'lsp-eslint
-  (advice-add 'lsp-eslint--working-directory :around
-              #'my/lsp-eslint-working-directory))
-
 (define-key lsp-mode-map (kbd "M-<f7>") #'lsp-find-references)
 
 (add-to-list 'major-mode-remap-alist

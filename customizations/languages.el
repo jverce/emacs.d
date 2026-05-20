@@ -11,9 +11,6 @@
 (add-hook 'prog-mode-hook #'my/lsp-deferred-except-python)
 
 ;; Extra auto-mode-alist entries for extensions not covered by treesit-auto.
-(add-to-list 'auto-mode-alist '("\\.jsx\\'" . tsx-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.mts\\'" . typescript-ts-mode))
-(add-to-list 'auto-mode-alist '("\\.cts\\'" . typescript-ts-mode))
 (add-to-list 'auto-mode-alist '("Rakefile\\'" . ruby-ts-mode))
 (add-to-list 'auto-mode-alist '("\\.rake\\'" . ruby-ts-mode))
 (add-to-list 'auto-mode-alist '("Gemfile\\'" . ruby-ts-mode))
