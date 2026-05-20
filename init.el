@@ -1,10 +1,23 @@
-;;; -*- lexical-binding: t -*-
-;; Emacs comes with package.el for installing packages.
-;; Try M-x list-packages to see what's available.
+;;; init.el --- User Emacs config bootstrap -*- lexical-binding: t -*-
+;;; Commentary:
+;; Bootstrap order:
+;;   1. Configure package archives and bootstrap a few packages we rely on
+;;      before any `use-package' clauses run.
+;;   2. Resolve the shell PATH so external tooling (LSP servers, formatters)
+;;      is reachable.
+;;   3. Enable `envrc-global-mode' for direnv/nix project environments.
+;;   4. Auto-load every .el file in customizations/ in alphabetic order. The
+;;      numeric prefixes on core modules (00-, 10-, ...) and the `lang-'
+;;      prefix on language modules document and enforce load order.
+;;   5. Load `custom.el' (auto-generated, gitignored) for customize-driven
+;;      settings.
+;;   6. Load `local.el' last (gitignored, optional) for per-machine overrides.
+;;; Code:
+
 (require 'package)
-(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+(setq package-archives '(("melpa"        . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
-                         ("elpa" . "https://elpa.gnu.org/packages/")))
+                         ("elpa"         . "https://elpa.gnu.org/packages/")))
 (package-initialize)
 
 ;; Retry package installs to handle transient network/archive failures.
@@ -13,7 +26,7 @@
 
 (defun my/ensure-package-with-retries (pkg &optional retries delay)
   (let* ((max-attempts (or retries my/package-bootstrap-max-retries))
-         (retry-delay (or delay my/package-bootstrap-retry-delay))
+         (retry-delay  (or delay   my/package-bootstrap-retry-delay))
          (attempt 1)
          (installed (package-installed-p pkg))
          last-error)
@@ -33,13 +46,12 @@
        "Failed to install `%s` after %d attempt(s): %s"
        pkg
        max-attempts
-       (if last-error
-           (error-message-string last-error)
-         "unknown error")))
+       (if last-error (error-message-string last-error) "unknown error")))
     installed))
 
 (defun my/ensure-required-packages ()
-  (dolist (pkg '(setup flycheck lsp-mode ruff-format))
+  "Install packages that customization files depend on at load time."
+  (dolist (pkg '(flycheck lsp-mode ruff-format))
     (my/ensure-package-with-retries pkg)))
 
 (my/ensure-required-packages)
@@ -47,13 +59,14 @@
 ;; Copy PATH from a deterministic login shell.
 ;; launchctl can set SHELL to /bin/sh for daemon sessions, so we map by OS.
 (let* ((preferred-shell (cond
-                         ((eq system-type 'darwin) "/bin/zsh")
+                         ((eq system-type 'darwin)    "/bin/zsh")
                          ((eq system-type 'gnu/linux) "/bin/bash")
-                         (t "/bin/sh")))
+                         (t                           "/bin/sh")))
        (login-shell (if (file-exists-p preferred-shell)
                         preferred-shell
                       "/bin/sh"))
-       (shell-path-cmd (format "%s -l -c 'printf %%s \"$PATH\"'" (shell-quote-argument login-shell)))
+       (shell-path-cmd (format "%s -l -c 'printf %%s \"$PATH\"'"
+                               (shell-quote-argument login-shell)))
        (shell-path (string-trim-right (shell-command-to-string shell-path-cmd)))
        (path (concat (getenv "HOME") "/.asdf/shims:" shell-path)))
   (setenv "PATH" path)
@@ -65,40 +78,26 @@
   (envrc-global-mode)
   (setq envrc-show-summary-in-minibuffer nil))
 
-;; setup.el provides a macro for configuration patterns
-;; it makes package installation and config nice and tidy!
-;; https://www.emacswiki.org/emacs/SetupEl
-(require 'setup)
+;; Auto-load every .el file under customizations/ in alphabetic order.
+;; To add a new module, drop a file in customizations/ — no edits to init.el
+;; needed. Use numeric prefixes (00-, 10-, ...) on core modules to control
+;; load order, and the `lang-' prefix for language modules.
+(let ((customizations-dir (expand-file-name "customizations" user-emacs-directory)))
+  (add-to-list 'load-path customizations-dir)
+  (dolist (file (directory-files customizations-dir t "\\.el\\'"))
+    (load (file-name-sans-extension file))))
 
-;; All other features are loaded one by one from
-;; the customizations directory. Read those files
-;; to find out what they do.
-(add-to-list 'load-path "~/.emacs.d/customizations")
-
-(defvar addons
-  '("ui.el"
-    "navigation.el"
-    "projects.el"
-    "git.el"
-    "filetree.el"
-    "editing.el"
-    "lsp.el"
-    "languages.el"
-    "go.el"
-    "terraform.el"
-    "setup-python.el"
-    "setup-yaml.el"
-    "markdown.el"
-    "elisp-editing.el"
-    "setup-clojure.el"
-    "setup-js.el"
-    "shell-integration.el"))
-
-(dolist (x addons)
-  (load x))
-
-;; Make gc pauses faster by decreasing the threshold.
+;; Make GC pauses faster after init by lowering the threshold.
 (setq gc-cons-threshold (* 2 1000 1000))
 
+;; Auto-generated by Emacs's customize system; gitignored.
 (setq custom-file (concat user-emacs-directory "custom.el"))
 (load custom-file 'noerror)
+
+;; Per-machine overrides (gitignored). Loaded last so it can shadow anything.
+(let ((local (concat user-emacs-directory "local.el")))
+  (when (file-exists-p local)
+    (load local 'noerror)))
+
+(provide 'init)
+;;; init.el ends here

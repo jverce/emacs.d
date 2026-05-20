@@ -1,17 +1,18 @@
-;;; markdown.el --- VSCode-like Markdown editing -*- lexical-binding: t -*-
+;;; lang-markdown.el --- Markdown editing with markdownlint-cli2 -*- lexical-binding: t -*-
+;;; Commentary:
+;; markdown-mode for `.md', gfm-mode for README files, plus optional
+;; format-on-save and flycheck linting via markdownlint-cli2. If the binary
+;; is missing, both features quietly disable themselves (a one-time message
+;; is printed) so the rest of the editor keeps working.
+;;; Code:
 
 (use-package markdown-mode
   :ensure t
-
-  :mode
-  (("\\.md\\'" . markdown-mode)
-   ("\\.markdown\\'" . markdown-mode)
-   ("README\\.md\\'" . gfm-mode))
-
-  :bind
-  (:map markdown-mode-map
-        ("C-c C-c v" . markdown-live-preview-mode))
-
+  :mode (("\\.md\\'"       . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode)
+         ("README\\.md\\'" . gfm-mode))
+  :bind (:map markdown-mode-map
+              ("C-c C-c v" . markdown-live-preview-mode))
   :custom
   (markdown-indent-on-enter 'indent-and-new-item)
   (markdown-fontify-code-blocks-natively t))
@@ -39,8 +40,8 @@ Runs silently from `before-save-hook'. No-op if the binary is missing."
       (unwind-protect
           (progn
             (write-region nil nil tmpfile nil 'silent)
-            ;; Ignore exit code: non-zero just means unfixable warnings
-            ;; remain; the file has still been fixed in place where possible.
+            ;; Ignore exit code: non-zero just means unfixable warnings remain;
+            ;; the file has still been fixed in place where possible.
             (call-process "markdownlint-cli2" nil nil nil "--fix" tmpfile)
             (when (file-readable-p tmpfile)
               (erase-buffer)
@@ -61,3 +62,6 @@ Runs silently from `before-save-hook'. No-op if the binary is missing."
 (add-hook 'markdown-mode-hook #'my/markdown-warn-if-markdownlint-missing)
 (add-hook 'markdown-mode-hook #'my/markdown-install-save-hooks)
 (add-hook 'markdown-mode-hook #'my/markdown-enable-flycheck)
+
+(provide 'lang-markdown)
+;;; lang-markdown.el ends here

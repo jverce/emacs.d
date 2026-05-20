@@ -1,4 +1,11 @@
-;;; -*- lexical-binding: t -*-
+;;; lang-python.el --- Python editing with pylsp + ruff -*- lexical-binding: t -*-
+;;; Commentary:
+;; Force `python-ts-mode' for `.py'. Resolve Python tools from the project's
+;; .venv (uv-style) before falling back to the global PATH. Start pylsp once
+;; envrc has settled the environment, and tear pylsp down cleanly on exit
+;; (otherwise daemon shutdown can hang).
+;;; Code:
+
 ;; Force Python buffers onto python-ts-mode when available.
 (with-eval-after-load 'python
   (when (fboundp 'python-ts-mode)
@@ -6,10 +13,10 @@
           (assq-delete-all 'python-mode major-mode-remap-alist))
     (add-to-list 'major-mode-remap-alist
                  '(python-mode . python-ts-mode))
-    (add-to-list 'auto-mode-alist '("\\.py\\'" . python-ts-mode))
-    (add-to-list 'interpreter-mode-alist '("python" . python-ts-mode))))
+    (add-to-list 'auto-mode-alist        '("\\.py\\'"  . python-ts-mode))
+    (add-to-list 'interpreter-mode-alist '("python"    . python-ts-mode))))
 
-;; Install tree-sitter grammar if it's missing
+;; Install the tree-sitter grammar if it's missing.
 (when (and (fboundp 'treesit-available-p)
            (treesit-available-p)
            (not (treesit-language-available-p 'python)))
@@ -18,7 +25,8 @@
 (use-package ruff-format
   :ensure t)
 
-;; Ensure Python tools resolve from the project virtualenv first (uv uses .venv).
+;; Ensure Python tools resolve from the project virtualenv first
+;; (uv uses .venv).
 (defun my/python-project-venv-bin ()
   (when-let* ((project-root (or (locate-dominating-file default-directory ".venv")
                                 (locate-dominating-file default-directory "pyproject.toml")))
@@ -37,7 +45,8 @@
      (mapconcat
       #'identity
       (cons venv-bin
-            (delete venv-bin (split-string (or (getenv "PATH") "") path-separator t)))
+            (delete venv-bin
+                    (split-string (or (getenv "PATH") "") path-separator t)))
       path-separator))))
 
 ;; Load Python LSP clients so lsp-deferred can match immediately.
@@ -87,3 +96,6 @@
   (add-hook hook #'my/python-use-project-venv)
   (add-hook hook #'ruff-format-on-save-mode)
   (add-hook hook #'my/python-start-lsp-if-available))
+
+(provide 'lang-python)
+;;; lang-python.el ends here

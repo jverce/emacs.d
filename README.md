@@ -1,104 +1,152 @@
-# this is a Clojure-friendly emacs config
+# Emacs Configuration
 
-If you're new to emacs, check out
-[this introductory tutorial](http://www.braveclojure.com/basic-emacs/)!
+A modular, extensible Emacs configuration aimed at general-purpose IDE work
+(Go, Python, Terraform, YAML, JavaScript / TypeScript, Clojure, Markdown,
+Elisp). Originally forked from
+[`flyingmachine/emacs-for-clojure`](https://github.com/flyingmachine/emacs-for-clojure)
+and re-shaped over time.
 
 ## Installing
 
 1. Close Emacs.
-2. Delete `~/.emacs` or `~/.emacs.d` if they exist. (Windows users, your
-   emacs files will probably live in
-   `C:\Users\your_user_name\AppData\Roaming\`. So, for example, you
-   would delete `C:\Users\jason\AppData\Roaming\.emacs.d`.) This is
-   where Emacs looks for configuration files, and deleting these files
-   and directories will ensure that you start with a clean slate.
-3. Download the Emacs
-   [configuration zip file](https://github.com/flyingmachine/emacs-for-clojure/archive/book1.zip)
-   and unzip it. Its contents should be a folder,
-   `emacs-for-clojure-book1`. Run `mv path/to/emacs-for-clojure-book1
-   ~/.emacs.d`.
+2. Move any existing `~/.emacs.d` aside if you want a clean install.
+3. Clone this repo with submodules (the GitHub Dark Dimmed theme is a
+   submodule under `themes/`):
 
-Then open Emacs. The first time you start, it will take a few minutes,
-because it needs to download and install around fifty packages. You
-will see some warnings pop up, but they are only style suggestions for
-the packages being loaded.
+   ```sh
+   git clone --recurse-submodules <this-repo-url> ~/.emacs.d
+   ```
 
-## Prerequisites
-Since you're working in Clojure, we assume you have it and its prerequisites
-installed (see [this guide](https://clojure.org/guides/install_clojure) for
-those instructions). Additionally, you're likely to want to have
-[Leiningen](https://leiningen.org/) installed, since many many projects use
-it for running builds, tests, and tasks.
+4. Start Emacs. The first run installs ~50 packages from MELPA / GNU ELPA and
+   may take a couple of minutes.
+5. Once it's up, run `M-x all-the-icons-install-fonts` to install the icon
+   fonts used by `doom-modeline`. Do this once per machine.
 
-To support specific features of this emacs configuration, there are four more
-prerequisites:
+### Optional prerequisites
 
-1. [git](https://git-scm.com/) is the dominant system for source code
-   version control. There's a good chance it came installed with your operating
-   system of choice, but in case it didn't, you'll want it!
-2. [clojure-lsp](https://clojure-lsp.io/installation/) enables Find References,
-   live linting, and many more features.
-3. To get nice icons in your modeline, you need the fonts installed. After
-   startup the first time, run `M-x all-the-icons-install-fonts`. You will only
-   need to do this once.
-4. [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) enables
-   Markdown linting and format-on-save. On Arch Linux, install it with
-   `sudo pacman -S markdownlint-cli2`.
+Each language module degrades gracefully when its tooling is missing, but to
+get the full experience install:
 
-### A Word About Project-Wide Search
-One of the capabilities that comes in very handy is searching for some text
-across all the files within your project. You can use git for that with the following
-command: `M-x counsel-git-grep`. This works just fine, with the caveat that it
-_must_ be in a directory version-controlled with git. There are quite a few
-alternative search utilities, but you'll have to install them separately. In
-practice, you'll probably settle on one you like and use it exclusively. Here
-are the links, along with the emacs command to invoke each:
+- **Go** — `gopls` (`go install golang.org/x/tools/gopls@latest`).
+- **Python** — `pylsp` and `ruff` in your project's `.venv`. The Python module
+  detects the nearest `.venv` (uv-style) or `pyproject.toml` and uses the
+  project-local Python tools first.
+- **Terraform** — `terraform` (the `fmt` subcommand is used on save).
+- **Clojure** — [`clojure-lsp`](https://clojure-lsp.io/installation/) and
+  [Leiningen](https://leiningen.org/).
+- **JS / TS** — per-project `eslint` and / or `biome` in `node_modules`.
+  These LSP clients are auto-disabled when the project has no matching
+  config file.
+- **Markdown** —
+  [`markdownlint-cli2`](https://github.com/DavidAnson/markdownlint-cli2) for
+  linting and format-on-save.
+- **Search** —
+  [`ripgrep`](https://github.com/BurntSushi/ripgrep) (`M-x counsel-rg`) or
+  [The Silver Searcher](https://github.com/ggreer/the_silver_searcher)
+  (`M-x counsel-ag`).
+- **Fonts** — [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
+  if you want the configured default font.
 
-* [ack](https://beyondgrep.com/) `M-x counsel-ack`
-* [The Silver Searcher](https://github.com/ggreer/the_silver_searcher) `M-x
-  counsel-ag`
-* [The Platinum
-  Searcher](https://github.com/monochromegane/the_platinum_searcher) `M-x
-  counsel-pt`
-* [ripgrep](https://github.com/BurntSushi/ripgrep) `M-x counsel-rg`
+## Layout
 
-## Features
-This will allow you to edit Clojure files with syntax-aware
-highlighting and [structural
-editing](https://clojure.org/guides/structural_editing)
-via paredit, which means it will keep all your delimiters for nested forms
-balanced (think parens, square brackets, and curly braces). Check out [this animated
-guide](http://danmidwood.com/content/2014/11/21/animated-paredit.html)
-to paredit. It's one of those things that seems strange at first, but
-once you get used to it, you won't want to edit Clojure without it!
+```
+~/.emacs.d/
+├── early-init.el                  Pause GC during startup.
+├── init.el                        Bootstrap + auto-load + local.el hook.
+├── custom.el                      Auto-generated, gitignored.
+├── local.el                       Optional, gitignored, machine-specific.
+├── themes/github/                 Theme submodule (GitHub Dark Dimmed).
+└── customizations/
+    ├── 00-lib-utils.el            Shared utilities.
+    ├── 01-lib-language.el         my/define-language helper.
+    ├── 10-ui.el                   Frame, theme, modeline, fonts.
+    ├── 15-editing.el              Editing defaults, tree-sitter grammars.
+    ├── 20-navigation.el           which-key, ivy/counsel/swiper.
+    ├── 25-projects.el             Projectile + counsel-projectile + ag.
+    ├── 30-git.el                  Magit.
+    ├── 35-filetree.el             Treemacs + ace-window.
+    ├── 40-lsp.el                  Core LSP, flycheck, dap-mode.
+    ├── 45-extra-modes.el          prog-mode-wide LSP hook + Ruby/JVM/.h mappings.
+    ├── 50-elisp-editing.el        paredit, eldoc, rainbow-delimiters.
+    ├── lang-clojure.el            CIDER, clj-refactor, cider-hydra.
+    ├── lang-go.el                 go-ts-mode + gopls + format-on-save.
+    ├── lang-js.el                 js-ts-mode, eslint/biome gating.
+    ├── lang-markdown.el           markdown-mode + markdownlint-cli2.
+    ├── lang-python.el             python-ts-mode + pylsp + ruff + venv resolution.
+    ├── lang-terraform.el          terraform-mode + format-on-save + outline.
+    └── lang-yaml.el               yaml-mode + LSP.
+```
 
-Other excellent capabilities you'll want to know about include:
+`init.el` auto-loads every `.el` file in `customizations/` in alphabetic
+order. The numeric prefixes on core modules (`00-`, `10-`, …) and the
+`lang-` prefix on language modules document and enforce load order. There
+is no hand-curated list to maintain.
 
-* [CIDER](https://cider.mx/), a fully interactive Clojure environent
-* [clojure-lsp](https://clojure-lsp.io/), provides static analysis
-  features for Clojure, such as live style and syntax warnings
-* [Projectile](https://projectile.mx/), navigate and manage project
-  files
-* [Magit](https://magit.vc/), a complete interface to git
-* [Treemacs](https://github.com/Alexander-Miller/treemacs), a tree
-  layout file explorer
+## Adding a new language
 
-## Upgrading
-Each package we use gets updated by its authors, at whatever cadence works for
-them. It's a good idea to stay up-to-date, to get improvements and bug
-fixes. It's analogous to keeping the software up-to-date in your operating
-system.
+For a typical "tree-sitter mode + LSP + format-on-save" language, drop a
+single file in `customizations/`. Example — Rust:
 
-When you run `M-x list-packages` it refreshes the cache of all the package
-repositories, and then tells you in the status line whether there are any
-updates to install. Press `U` to mark all upgradeable packages for installation,
-and then press `x` to execute the installation. You will be prompted to confirm,
-and when you press `y` the package updates will be installed. Press `q` to exit
-the package list when it's finished.
+```elisp
+;;; lang-rust.el --- Rust editing -*- lexical-binding: t -*-
+;;; Code:
 
-If you ever get curious to look, you can find all the installed packages in `~/.emacs.d/elpa`.
+(my/define-language rust
+  :mode rust-ts-mode
+  :extensions ("\\.rs\\'")
+  :lsp t
+  :formatter lsp-format-buffer)
 
-## Running as a Daemon (macOS)
+(provide 'lang-rust)
+;;; lang-rust.el ends here
+```
+
+That's it. Restart Emacs (or `M-x load-file`) and `.rs` files will open in
+`rust-ts-mode`, start `rust-analyzer` via `lsp-deferred`, and reformat on
+save.
+
+`my/define-language` arguments:
+
+| Argument       | Description |
+|----------------|-------------|
+| `:mode`        | The major-mode symbol (required). |
+| `:extensions`  | List of regexps mapped to `:mode` in `auto-mode-alist`. |
+| `:lsp`         | When non-nil, add `lsp-deferred` to `<mode>-hook`. |
+| `:formatter`   | A formatter function. If its name ends in `-mode` it is enabled as a buffer-local minor mode; otherwise it is added to `before-save-hook` buffer-locally. |
+| `:save-hooks`  | A list of functions added to `before-save-hook` (use this when you need several save-time actions, e.g. format + organize-imports). |
+| `:extra-hooks` | A list of functions appended to `<mode>-hook`. |
+
+If a language needs more than that — virtualenv resolution, multiple LSP
+clients, project-local executables, custom file-name mappings — write a
+hand-rolled `lang-<name>.el`. See `lang-python.el`, `lang-js.el`, and
+`lang-clojure.el` as references.
+
+## Per-machine overrides (`local.el`)
+
+`init.el` loads `~/.emacs.d/local.el` last if it exists. The file is
+gitignored, so machine-specific tweaks don't pollute the repo. Typical uses:
+
+```elisp
+;;; local.el --- machine-specific overrides
+(set-face-attribute 'default nil :height 130)  ;; bigger font for this monitor
+(setq projectile-project-search-path '("~/work/" "~/oss/"))
+(load "~/work/internal-tools.el")              ;; private setup
+```
+
+## Project-wide search
+
+- `M-x counsel-rg` — ripgrep (recommended).
+- `M-x counsel-ag` — The Silver Searcher.
+- `M-x counsel-git-grep` — `git grep` (no extra binary required, but only
+  works inside git repositories).
+
+## Upgrading packages
+
+`M-x list-packages` refreshes the cache and shows updates. Press `U` to
+mark all upgradeable packages, then `x` to install. Installed packages
+live in `~/.emacs.d/elpa`.
+
+## Running as a daemon (macOS)
 
 To run Emacs as a background daemon that starts on login, create a
 launchd plist at `~/Library/LaunchAgents/org.gnu.emacs.daemon.plist`:
@@ -123,55 +171,23 @@ launchd plist at `~/Library/LaunchAgents/org.gnu.emacs.daemon.plist`:
 </plist>
 ```
 
-Use `--fg-daemon` instead of `--daemon`. The `--daemon` flag forks a
-child process, which causes launchd to lose track of the real
-PID. This breaks `KeepAlive` restarts and `launchctl kickstart -k`,
-and can result in stale duplicate daemons. `--fg-daemon` keeps Emacs
-in the foreground so launchd can manage it correctly.
+Use `--fg-daemon`, not `--daemon`. The `--daemon` flag forks a child
+process, which causes launchd to lose track of the real PID. That breaks
+`KeepAlive` restarts and `launchctl kickstart -k`, and can result in stale
+duplicate daemons. `--fg-daemon` keeps Emacs in the foreground so launchd
+manages it correctly.
 
 Load the service with:
 
-```bash
+```sh
 launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/org.gnu.emacs.daemon.plist
 ```
 
-Then connect with `emacsclient -c` to open a new frame, or
-`emacsclient -t` for a terminal frame.
+Connect with `emacsclient -c` for a graphical frame, or `emacsclient -t`
+for a terminal frame.
 
 To restart the daemon:
 
-```bash
+```sh
 launchctl kickstart -k gui/$(id -u)/org.gnu.emacs.daemon
 ```
-
-## Organization
-
-I've tried to separate everything logically and document the purpose
-of every line. [`init.el`](./init.el) acts as a kind of table of
-contents.  It's a good idea to eventually go through `init.el` and the
-files under the `customizations` directory so that you know exactly
-what's going on.
-
-## Supporting CSS, HTML, JS, etc.
-
-Emacs has decent support for CSS, HTML, JS, and many other file types
-out of the box, but if you want better support, then have a look at
-[my personal emacs config's
-init.el](https://github.com/flyingmachine/emacs.d/blob/master/init.el).
-It's meant to read as a table of contents. The emacs.d as a whole adds the following:
-
-* [Customizes js-mode and html editing](https://github.com/flyingmachine/emacs.d/blob/master/customizations/setup-js.el)
-    * Sets indentation level to 2 spaces for JS
-    * enables subword-mode so that M-f and M-b break on capitalization changes
-    * Uses `tagedit` to give you paredit-like functionality when editing html
-    * adds support for coffee mode
-* [Uses enh-ruby-mode for ruby
-editing](https://github.com/flyingmachine/emacs.d/blob/master/customizations/setup-ruby.el).
-enh-ruby-mode is a little nicer than the built-in ruby-mode, in my opinion.
-    * Associates many filenames and extensions with enh-ruby-mode (.rb, .rake, Rakefile, etc)
-    * Adds keybindings for running specs
-* Adds support for YAML and SCSS using the yaml-mode and scss-mode packages
-
-In general, if you want to add support for a language then you should
-be able to find good instructions for it through Google. Most of the
-time, you'll just need to install the "x-lang-mode" package for it.
