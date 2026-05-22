@@ -146,6 +146,23 @@ gitignored, so machine-specific tweaks don't pollute the repo. Typical uses:
 mark all upgradeable packages, then `x` to install. Installed packages
 live in `~/.emacs.d/elpa`.
 
+For a normal config-wide upgrade, run `M-x my/upgrade-config`. It refreshes
+ELPA packages and optionally updates git submodules. Restart Emacs afterward.
+
+If startup fails after package updates, or you see stale bytecode/native
+compilation errors such as missing variables from an installed package, do a
+clean package rebuild:
+
+```sh
+cd ~/.emacs.d
+scripts/rebuild-emacs-packages.sh --yes
+```
+
+The rebuild script stops the user `emacs.service` when systemd is available,
+removes generated package artifacts (`elpa/`, `eln-cache/`, archive caches,
+package quickstart files, and stray `*.elc` files), batch-loads `init.el` to
+reinstall packages, then restarts the service.
+
 ## Running as a daemon (macOS)
 
 To run Emacs as a background daemon that starts on login, create a
