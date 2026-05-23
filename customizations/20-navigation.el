@@ -11,6 +11,7 @@
 
 (use-package counsel
   :ensure t
+  :demand t
   :bind (("C-s"     . swiper)
          ("s-f"     . swiper)
          ("C-x C-f" . counsel-find-file)

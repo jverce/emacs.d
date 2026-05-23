@@ -38,8 +38,9 @@
   (when-let ((venv-bin (my/python-project-venv-bin)))
     (setq-local exec-path (cons venv-bin (delete venv-bin exec-path)))
     (setq-local process-environment (copy-sequence process-environment))
-    ;; Use pylsp as the Python LSP backend.
-    (setq-local lsp-enabled-clients '(pylsp))
+    ;; Use pylsp as the Python LSP backend while allowing add-on prose
+    ;; diagnostics from harper-ls when it is installed.
+    (setq-local lsp-enabled-clients '(pylsp harper-ls))
     (setenv
      "PATH"
      (mapconcat

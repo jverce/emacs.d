@@ -9,12 +9,12 @@
 
 (use-package projectile
   :ensure t
+  :demand t
   :init
   (setq projectile-project-search-path '("~/dev/"))
-  :bind-keymap
-  (("C-x p" . projectile-command-map)
-   ("C-c p" . projectile-command-map))
   :config
+  (define-key global-map (kbd "C-x p") projectile-command-map)
+  (define-key global-map (kbd "C-c p") projectile-command-map)
   (dolist (dir '("node_modules" ".next" "dist" "build" "out"
                  ".turbo" ".cache" "coverage" ".venv" "venv"
                  "__pycache__" ".mypy_cache" ".pytest_cache"
@@ -26,6 +26,7 @@
 
 (use-package counsel-projectile
   :ensure t
+  :demand t
   :after (counsel projectile)
   :config (counsel-projectile-mode))
 

@@ -1,10 +1,16 @@
-;;; lang-markdown.el --- Markdown editing with markdownlint-cli2 -*- lexical-binding: t -*-
+;;; lang-markdown.el --- Markdown editing with code block support -*- lexical-binding: t -*-
 ;;; Commentary:
 ;; markdown-mode for `.md', gfm-mode for README files, plus optional
 ;; format-on-save and flycheck linting via markdownlint-cli2. If the binary
 ;; is missing, both features quietly disable themselves (a one-time message
-;; is printed) so the rest of the editor keeps working.
+;; is printed) so the rest of the editor keeps working. Fenced code blocks
+;; can be edited in indirect buffers using the language mode named by the
+;; fence, which gives normal indentation for that language.
 ;;; Code:
+
+(use-package edit-indirect
+  :ensure t
+  :defer t)
 
 (use-package markdown-mode
   :ensure t
@@ -12,6 +18,7 @@
          ("\\.markdown\\'" . markdown-mode)
          ("README\\.md\\'" . gfm-mode))
   :bind (:map markdown-mode-map
+              ("C-c '"     . markdown-edit-code-block)
               ("C-c C-c v" . markdown-live-preview-mode))
   :custom
   (markdown-indent-on-enter 'indent-and-new-item)
