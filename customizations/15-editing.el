@@ -60,7 +60,9 @@
 
 (setq electric-indent-mode t)
 
-(add-hook 'after-init-hook #'global-company-mode)
+(use-package company
+  :ensure t
+  :hook (after-init . global-company-mode))
 
 ;; treesit-auto manages tree-sitter grammars and remaps modes automatically.
 (use-package treesit-auto

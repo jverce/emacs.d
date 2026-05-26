@@ -15,6 +15,12 @@
 ;;; Code:
 
 (require 'package)
+;; Workaround for Emacs 30 GnuTLS error -54 (PULL_ERROR) when negotiating
+;; TLS 1.3 with elpa.gnu.org. Disabling TLS 1.3 forces a working handshake;
+;; MELPA works either way. Without this, package-refresh-contents silently
+;; fails for the ELPA archive and any package whose deps live there
+;; (e.g. lsp-mode -> spinner) cannot be installed on a fresh checkout.
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives '(("melpa"        . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("elpa"         . "https://elpa.gnu.org/packages/")))
