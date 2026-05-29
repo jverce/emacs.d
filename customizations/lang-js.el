@@ -78,6 +78,8 @@ project looking for legacy `.eslintrc' files."
         (push 'eslint disabled))
       (unless (my/locate-config-upward file my/biome-config-files)
         (push 'biome disabled))
+      (when (my/locate-config-upward file my/biome-config-files)
+        (push 'json-ls disabled))
       (setq-local lsp-disabled-clients disabled))
     ;; If the project uses flat config, force flat-config resolution two ways:
     ;;
