@@ -73,15 +73,44 @@ buffers unusable."
                 my/harper-language-id-by-mode)
       "plaintext"))
 
+(defvar my/harper--server-path nil
+  "Cached absolute path to a resolved harper-ls binary.")
+
+(defun my/harper--candidate-paths ()
+  "Candidate harper-ls binary paths, most-preferred first."
+  (let* ((asdf-data (or (getenv "ASDF_DATA_DIR") (expand-file-name "~/.asdf")))
+         (asdf-rust (sort (file-expand-wildcards
+                           (expand-file-name "installs/rust/*/bin/harper-ls"
+                                             asdf-data))
+                          #'string>)))            ; newest rust version first
+    (append
+     ;; 1. Anything on exec-path: system, Homebrew, rustup, or an asdf reshim.
+     (when-let ((p (executable-find "harper-ls"))) (list p))
+     ;; 2. Native cargo/rustup install, even when ~/.cargo/bin isn't on PATH.
+     (list (expand-file-name "~/.cargo/bin/harper-ls"))
+     ;; 3. asdf-managed rust (cargo install without reshim).
+     asdf-rust
+     ;; 4. lsp-mode-managed cargo cache.
+     (when (fboundp 'lsp-package-path)
+       (list (lsp-package-path 'harper-ls))))))
+
+(defun my/harper-locate-server ()
+  "Locate an executable harper-ls across asdf, cargo, and system installs.
+Return its absolute path, or nil when none is installed.  Memoizes the hit."
+  (or my/harper--server-path
+      (setq my/harper--server-path
+            (seq-find (lambda (p) (and p (file-executable-p p)))
+                      (my/harper--candidate-paths)))))
+
 (defun my/harper-server-command ()
-  "Return the harper-ls command, preferring a system install.
-Falls back to the lsp-mode-managed Cargo install path."
-  (list (or (executable-find "harper-ls")
-            (lsp-package-path 'harper-ls))
-        "--stdio"))
+  "Return the harper-ls command, or nil when no binary is installed."
+  (when-let ((bin (my/harper-locate-server)))
+    (list bin "--stdio")))
 
 (defun my/harper-start ()
-  (lsp-deferred))
+  "Start harper-ls via lsp only when a binary is installed."
+  (when (my/harper-locate-server)
+    (lsp-deferred)))
 
 (with-eval-after-load 'lsp-mode
   (lsp-dependency 'harper-ls
