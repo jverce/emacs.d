@@ -40,9 +40,9 @@ get the full experience install:
 - **Markdown** —
   [`markdownlint-cli2`](https://github.com/DavidAnson/markdownlint-cli2) for
   linting and format-on-save.
-- **Prose checking** — `harper-ls` is installed by `lsp-mode` on demand. Jinx
-  spell checking needs OS-level Enchant dictionaries; install them with
-  `scripts/install-spell-dictionaries.sh`.
+- **Prose checking** — `harper-ls` (installed by `lsp-mode` on demand) provides
+  spelling, grammar, and style checking with a built-in dictionary; no OS-level
+  setup needed.
 - **Search** —
   [`ripgrep`](https://github.com/BurntSushi/ripgrep) (`M-x counsel-rg`) or
   [The Silver Searcher](https://github.com/ggreer/the_silver_searcher)

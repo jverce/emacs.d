@@ -1,41 +1,11 @@
 ;;; 16-prose-checking.el --- Spelling and grammar checking -*- lexical-binding: t -*-
 ;;; Commentary:
-;; Jinx provides fast local spell checking via Enchant.  Harper provides local
-;; grammar/style diagnostics over LSP and checks comments only in supported
-;; programming languages.
+;; Harper provides local spell, grammar, and style diagnostics over LSP — the
+;; single tool for both spelling and grammar.  It checks prose buffers fully
+;; and comments only in supported programming languages.
 ;;; Code:
 
 (require 'seq)
-
-(defvar my/jinx-missing-dictionary-warning-shown nil)
-
-(defun my/jinx-dictionary-installer-command ()
-  (abbreviate-file-name
-   (expand-file-name "scripts/install-spell-dictionaries.sh" user-emacs-directory)))
-
-(defun my/jinx-mode-if-dictionaries ()
-  "Enable `jinx-mode' only when Enchant can load a dictionary.
-Without dictionaries Jinx treats every word as misspelled, which makes prose
-buffers unusable."
-  (condition-case err
-      (progn
-        (jinx-mode 1)
-        (unless (bound-and-true-p jinx--dicts)
-          (jinx-mode -1)
-          (unless my/jinx-missing-dictionary-warning-shown
-            (setq my/jinx-missing-dictionary-warning-shown t)
-            (message
-             "Jinx disabled: no Enchant dictionaries for %s. Run %s."
-             jinx-languages
-             (my/jinx-dictionary-installer-command)))))
-    (error
-     (message "Jinx disabled: %s" (error-message-string err)))))
-
-(use-package jinx
-  :ensure t
-  :hook ((text-mode prog-mode conf-mode git-commit-mode) . my/jinx-mode-if-dictionaries)
-  :bind (("M-$" . jinx-correct)
-         ("C-M-$" . jinx-languages)))
 
 (defconst my/harper-language-id-by-mode
   '((text-mode . "plaintext")
@@ -128,7 +98,7 @@ Return its absolute path, or nil when none is installed.  Memoizes the hit."
                            :path "harper-ls"))
 
   (lsp-register-custom-settings
-   '(("harper-ls.linters.SpellCheck" nil t)
+   '(("harper-ls.linters.SpellCheck" t t)
      ("harper-ls.linters.SentenceCapitalization" nil t)
      ("harper-ls.diagnosticSeverity" "hint")))
 
