@@ -113,6 +113,15 @@ Return its absolute path, or nil when none is installed.  Memoizes the hit."
     (lsp-deferred)))
 
 (with-eval-after-load 'lsp-mode
+  ;; lsp-mode derives the `didOpen' languageId from `lsp-language-id-configuration'
+  ;; (the client `:language-id' slot is not consulted for `didOpen').  Commit
+  ;; buffers are `text-mode', which resolves to "plaintext", so harper-ls lints
+  ;; the entire buffer — including the verbose diff git appends below the
+  ;; scissors line — and trips flycheck's error threshold.  Map commit files to
+  ;; "gitcommit" so harper checks only the message and skips comments + the diff.
+  (add-to-list 'lsp-language-id-configuration
+               '("/\\(COMMIT_EDITMSG\\|MERGE_MSG\\|TAG_EDITMSG\\)\\'" . "gitcommit"))
+
   (lsp-dependency 'harper-ls
                   '(:system "harper-ls")
                   '(:cargo :package "harper-ls"
