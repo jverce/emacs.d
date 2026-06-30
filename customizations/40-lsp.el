@@ -18,10 +18,17 @@
   (setq lsp-headerline-breadcrumb-segments '(path-up-to-project file symbols))
   (lsp-headerline-breadcrumb-mode))
 
+(defun my/lsp-format-buffer-maybe ()
+  "Format via LSP only when the server advertises the capability.
+Some servers (e.g. graphql-language-service) have no formatting support;
+calling `lsp-format-buffer' there errors and aborts the save."
+  (when (lsp-feature? "textDocument/formatting")
+    (lsp-format-buffer)))
+
 (defun my/lsp-ensure-features ()
   "Enable diagnostics and format-on-save for LSP-managed buffers."
   (lsp-diagnostics-mode 1)
-  (add-hook 'before-save-hook #'lsp-format-buffer nil t))
+  (add-hook 'before-save-hook #'my/lsp-format-buffer-maybe nil t))
 
 (use-package lsp-mode
   :ensure t

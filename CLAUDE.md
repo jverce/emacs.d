@@ -59,6 +59,7 @@ document and enforce load order — there is no hand-curated list.
 | `50-elisp-editing.el` | Paredit, eldoc, rainbow-delimiters for Lisp modes. |
 | `lang-clojure.el` | Clojure toolchain: clojure-mode, CIDER, clj-refactor, cider-hydra, paredit. Hand-written. |
 | `lang-go.el` | go-ts-mode + LSP + format + organize-imports on save. Uses `my/define-language`. |
+| `lang-graphql.el` | graphql-mode + LSP + Prettier format-on-save (graceful when missing). Hand-written. |
 | `lang-js.el` | JavaScript / TypeScript / HTML / CoffeeScript with per-project ESLint and Biome LSP gating. Hand-written. |
 | `lang-markdown.el` | markdown-mode + markdownlint-cli2 (graceful degradation when missing). Hand-written. |
 | `lang-python.el` | python-ts-mode + pylsp + ruff + venv resolution + clean shutdown. Hand-written. |
