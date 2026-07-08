@@ -74,7 +74,11 @@
        (shell-path-cmd (format "%s -l -c 'printf %%s \"$PATH\"'"
                                (shell-quote-argument login-shell)))
        (shell-path (string-trim-right (shell-command-to-string shell-path-cmd)))
-       (path (concat (getenv "HOME") "/.asdf/shims:" shell-path)))
+       ;; ~/.local/bin holds pipx-installed tools (e.g. autotools-language-server)
+       ;; and is only added to PATH by interactive shells.
+       (path (concat (getenv "HOME") "/.asdf/shims:"
+                     (getenv "HOME") "/.local/bin:"
+                     shell-path)))
   (setenv "PATH" path)
   (setq exec-path (parse-colon-path path)))
 

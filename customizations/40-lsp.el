@@ -30,6 +30,21 @@ calling `lsp-format-buffer' there errors and aborts the save."
   (lsp-diagnostics-mode 1)
   (add-hook 'before-save-hook #'my/lsp-format-buffer-maybe nil t))
 
+(defun my/makefile-capf ()
+  "`makefile-completions-at-point' with target/macro tables refreshed first.
+make-mode only refreshes them from electric keys (off by default), and
+falls through to LSP when the buffer has no match."
+  (let ((inhibit-message t))
+    ;; ponytail: full-buffer rescan per completion request; cache if it lags.
+    (makefile-pickup-everything t))
+  (nconc (makefile-completions-at-point) (list :exclusive 'no)))
+
+(defun my/makefile-prefer-native-completion ()
+  "Complete this buffer's targets/macros before autotools-ls.
+The server only knows builtin make names, not buffer-defined ones."
+  (when (derived-mode-p 'makefile-mode)
+    (add-hook 'completion-at-point-functions #'my/makefile-capf nil t)))
+
 (use-package lsp-mode
   :ensure t
   :commands (lsp lsp-mode lsp-deferred)
@@ -38,7 +53,8 @@ calling `lsp-format-buffer' there errors and aborts the save."
   :hook ((lsp-mode . lsp-enable-which-key-integration)
          (lsp-mode . my/lsp-setup-headerline)
          (lsp-mode . my/lsp-ensure-features)
-         (lsp-mode . company-mode))
+         (lsp-mode . company-mode)
+         (lsp-completion-mode . my/makefile-prefer-native-completion))
   :bind (:map lsp-mode-map
               ("M-<f7>" . lsp-find-references))
   :custom
@@ -48,7 +64,12 @@ calling `lsp-format-buffer' there errors and aborts the save."
   (lsp-headerline-breadcrumb-icons-enable nil)
   (lsp-headerline-arrow nil)
   :config
-  (lsp-modeline-code-actions-mode))
+  (lsp-modeline-code-actions-mode)
+  ;; lsp-mode registers autotools-ls for makefile modes (lsp-autotools.el)
+  ;; but ships no languageId mapping for them.
+  (dolist (mode '(makefile-mode makefile-automake-mode makefile-gmake-mode
+                  makefile-makepp-mode makefile-bsdmake-mode makefile-imake-mode))
+    (add-to-list 'lsp-language-id-configuration (cons mode "makefile"))))
 
 (use-package lsp-ui
   :ensure t
