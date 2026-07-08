@@ -60,6 +60,31 @@
 
 (setq electric-indent-mode t)
 
+;; Code folding: hideshow for code, outline for indentation formats (YAML).
+(add-hook 'prog-mode-hook #'hs-minor-mode)
+
+(defun my/toggle-fold ()
+  "Toggle folding of the block at point (hideshow or outline)."
+  (interactive)
+  (cond ((bound-and-true-p hs-minor-mode) (hs-toggle-hiding))
+        ((bound-and-true-p outline-minor-mode) (outline-cycle))
+        (t (user-error "No folding mode active"))))
+
+(defvar-local my/--folded-all nil)
+(defun my/toggle-fold-all ()
+  "Fold or unfold every block in the buffer."
+  (interactive)
+  (cond ((bound-and-true-p hs-minor-mode)
+         (if my/--folded-all (hs-show-all) (hs-hide-all))
+         (setq my/--folded-all (not my/--folded-all)))
+        ((bound-and-true-p outline-minor-mode) (outline-cycle-buffer))
+        (t (user-error "No folding mode active"))))
+
+;; C-c letter is reserved for users and survives terminals/tmux/ssh, unlike
+;; C-<tab>, which classic terminal encodings collapse into plain TAB.
+(global-set-key (kbd "C-c f") #'my/toggle-fold)
+(global-set-key (kbd "C-c F") #'my/toggle-fold-all)
+
 (use-package company
   :ensure t
   :hook (after-init . global-company-mode))
