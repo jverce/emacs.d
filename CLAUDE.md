@@ -48,6 +48,7 @@ document and enforce load order — there is no hand-curated list.
 |---|---|
 | `00-lib-utils.el` | Shared helpers (`my/locate-config-upward`, `my/find-executable-in-project`). |
 | `01-lib-language.el` | `my/define-language` macro for declarative language modules. |
+| `05-clipboard.el` | Terminal OS clipboard integration via macOS, Wayland, or X11 utilities. |
 | `10-ui.el` | Frame settings, fonts (FiraCode Nerd Font), doom-modeline, all-the-icons, theme loading. |
 | `15-editing.el` | General editor behavior (hippie-expand, line numbers, paren matching, backups, company-mode, treesit-auto, evil-nerd-commenter, hideshow folding in prog modes with `C-c f` / `C-c F` dwim fold commands). |
 | `20-navigation.el` | which-key, ivy/counsel/swiper completion framework, ivy-rich. |

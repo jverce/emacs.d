@@ -1,6 +1,6 @@
 ;;; 10-ui.el --- Frame, theme, modeline, and font setup -*- lexical-binding: t -*-
 ;;; Commentary:
-;; UI-only customizations: chrome, fonts, theme, modeline, OS clipboard.
+;; UI-only customizations: chrome, fonts, theme, modeline, GUI selections.
 ;;; Code:
 
 (tooltip-mode -1)
@@ -50,7 +50,7 @@
              (expand-file-name "themes/github/" user-emacs-directory))
 (load-theme 'github-dark-dimmed t)
 
-;; OS clipboard integration.
+;; GUI selection integration. Terminal clipboard support is in 05-clipboard.el.
 (setq select-enable-clipboard t
       x-select-enable-clipboard t
       x-select-enable-clipboard-manager t

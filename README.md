@@ -48,7 +48,9 @@ get the full experience install:
   [The Silver Searcher](https://github.com/ggreer/the_silver_searcher)
   (`M-x counsel-ag`).
 - **Fonts** — [FiraCode Nerd Font](https://www.nerdfonts.com/font-downloads)
-  if you want the configured default font.
+   if you want the configured default font.
+- **Terminal clipboard** — macOS uses its built-in `pbcopy` / `pbpaste`.
+  On Ubuntu, install `wl-clipboard` for Wayland or `xclip` for X11.
 
 ## Layout
 
@@ -62,6 +64,7 @@ get the full experience install:
 └── customizations/
     ├── 00-lib-utils.el            Shared utilities.
     ├── 01-lib-language.el         my/define-language helper.
+    ├── 05-clipboard.el            Terminal OS clipboard integration.
     ├── 10-ui.el                   Frame, theme, modeline, fonts.
     ├── 15-editing.el              Editing defaults, tree-sitter grammars.
     ├── 20-navigation.el           which-key, ivy/counsel/swiper.
